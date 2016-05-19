@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="97">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>CurlGlobal.h</itemPath>
+      <itemPath>Exceptions.h</itemPath>
+      <itemPath>FrequencyRangesCache.h</itemPath>
+      <itemPath>GoogleAPIClient.h</itemPath>
+      <itemPath>Log.h</itemPath>
+      <itemPath>Request.h</itemPath>
+      <itemPath>Singleton.h</itemPath>
+      <itemPath>SpectrumConstants.h</itemPath>
+      <itemPath>SpectrumUtilities.h</itemPath>
+      <itemPath>definitions.h</itemPath>
+      <itemPath>json.hpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>FrequencyRangesCache.cpp</itemPath>
+      <itemPath>GoogleAPIClient.cpp</itemPath>
+      <itemPath>Log.cpp</itemPath>
+      <itemPath>Request.cpp</itemPath>
+      <itemPath>SpectrumUtilities.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f1" displayName="test" projectFiles="true" kind="TEST">
+        <itemPath>Test.cpp</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>CLang|CLang</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+          <commandLine>-ggdb -Wall -pedantic -fsanitize=address -O3 -fno-omit-frame-pointer</commandLine>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+          </preprocessorList>
+          <warningLevel>3</warningLevel>
+        </ccTool>
+        <asmTool>
+          <warningLevel>3</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <commandLine>-lcurl -fsanitize=address</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="CurlGlobal.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Exceptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FrequencyRangesCache.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FrequencyRangesCache.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="GoogleAPIClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="GoogleAPIClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Log.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Request.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Request.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Singleton.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SpectrumConstants.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SpectrumUtilities.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SpectrumUtilities.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="definitions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>../googletest/googletest-1.7</pElem>
+            <pElem>../googletest/googletest-1.7/include</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../googletest"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../googletest"
+                            BC="${MAKE} -j 8 -f Makefile CONF=Release"
+                            CC="${MAKE} -j 8 -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libgoogletest.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+          <commandLine>-lcurl</commandLine>
+        </linkerTool>
+      </folder>
+      <item path="json.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <standard>8</standard>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="CurlGlobal.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Exceptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FrequencyRangesCache.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FrequencyRangesCache.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="GoogleAPIClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="GoogleAPIClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Log.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Request.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Request.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Singleton.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SpectrumConstants.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SpectrumUtilities.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SpectrumUtilities.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="definitions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
+      <item path="json.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

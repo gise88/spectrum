@@ -1,0 +1,7 @@
+.directory
+build/
+dist/
+
+nbproject/private/
+
+GoogleSpectrumApiKey.txt
