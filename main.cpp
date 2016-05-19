@@ -23,16 +23,14 @@
 #endif
 
 #include <cstdlib>
-#include "json.hpp"  // https://github.com/nlohmann/json
 
 #include "Log.h"
 #include "Exceptions.h"
 
 #include "GoogleAPIClient.h"
-#include "FrequencyRangesCache.h"
+#include "SpectrumManager.h"
 
 using namespace std;
-using JSON = nlohmann::json;
 
 #include <string>
 #include <utility>
@@ -53,40 +51,6 @@ int main(int argc, char** argv) {
 //	} catch (CURLErrorException &e) {
 //		printf("%s\n\n", e.what());
 //	}
-	
-	
-	FrequencyRange range1(15.2342342, 6000000, 6500000);
-	FrequencyRange range2(-59.02934938, 6500000, 7000000);
-	
-	printf("asdasdasd\n"); fflush(stdout);
-	
-	FrequencyRangesCache &cache = FrequencyRangesCache::Instance();
-	std::list<FrequencyRange> ranges = cache.get(0, 0);	
-	
-	for (auto item : ranges) {
-		printf("%lf  ", item.maxPowerDBm);
-		printf("%d   ", item.startHz);
-		printf("%d\n", item.stopHz);
-	}
-	
-	cache.push(0, 0, &range1);
-	cache.push(0, 0, &range2);
-	
-	
-	FrequencyRange range3(15.2342342, 6000000, 6500000);
-	FrequencyRange range4(15.2342342, 6000000, 6500000);
-	std::list<FrequencyRange *> list;
-	list.push_back(&range3);
-	list.push_back(&range4);
-	cache.push(1, 1, list);
-	
-	
-	ranges = cache.get(0, 0);
-	for (auto item : ranges) {
-		printf("%lf  ", item.maxPowerDBm);
-		printf("%d   ", item.startHz);
-		printf("%d\n", item.stopHz);
-	}
 	
 	return 0;
 }

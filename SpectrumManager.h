@@ -17,37 +17,28 @@
 
 
 
-#ifndef PROJECTIONMAPPER_H
-#define PROJECTIONMAPPER_H
+#ifndef SPECTRUMMANAGER_H
+#define SPECTRUMMANAGER_H
 
-#include <proj_api.h>
+#include <vector>
 
+#include "Singleton.h"
+#include "SpectrumChannelsCache.h"
+#include "ProjectionMapper.h"
 
-class ProjectionMapper {
+class SpectrumManager : public Singleton<SpectrumManager> {
 public:
+	SpectrumManager(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size, bool use_cache=true);
+	virtual ~SpectrumManager();
 	
-	ProjectionMapper(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
-	virtual ~ProjectionMapper();
-	
-	void LocalPosXY2LatLng(uint pos_x, uint pos_y, double& lat, double& lng);
-	void LocalPosXY2IndexXY(uint pos_x, uint pos_y, uint& idx_x, uint& idx_y);
-	
+	const std::vector<SpectrumChannel> GetChannels(uint pos_x, uint pos_y, double antenna_height = 30.0);
 	
 private:
 
-	double m_SWLat;
-	double m_SWLon;
-	double m_NWLat;
-	double m_NWLon;
-	double m_AreaWidth;
-	double m_AreaHeight;
-	double m_CellSideSize;
-	
-	projPJ m_PJMerc;
-	projPJ m_PJLatlng;
-	double m_OriginNorthing;
-	double m_OriginEastings;
+	bool m_UseCache;
+	ProjectionMapper m_ProjectionMapper;
+	SpectrumChannelsCache m_ChannelsCache;
 };
 
-#endif /* PROJECTIONMAPPER_H */
+#endif /* SPECTRUMMANAGER_H */
 

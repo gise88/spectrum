@@ -35,11 +35,12 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/FrequencyRangesCache.o \
 	${OBJECTDIR}/GoogleAPIClient.o \
 	${OBJECTDIR}/Log.o \
 	${OBJECTDIR}/ProjectionMapper.o \
 	${OBJECTDIR}/Request.o \
+	${OBJECTDIR}/SpectrumChannelsCache.o \
+	${OBJECTDIR}/SpectrumManager.o \
 	${OBJECTDIR}/main.o
 
 # Test Directory
@@ -77,11 +78,6 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrum: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrum ${OBJECTFILES} ${LDLIBSOPTIONS} -lm -lcurl -lproj
 
-${OBJECTDIR}/FrequencyRangesCache.o: FrequencyRangesCache.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FrequencyRangesCache.o FrequencyRangesCache.cpp
-
 ${OBJECTDIR}/GoogleAPIClient.o: GoogleAPIClient.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -101,6 +97,16 @@ ${OBJECTDIR}/Request.o: Request.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Request.o Request.cpp
+
+${OBJECTDIR}/SpectrumChannelsCache.o: SpectrumChannelsCache.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumChannelsCache.o SpectrumChannelsCache.cpp
+
+${OBJECTDIR}/SpectrumManager.o: SpectrumManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumManager.o SpectrumManager.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -124,19 +130,6 @@ ${TESTDIR}/Test.o: Test.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/Test.o Test.cpp
 
-
-${OBJECTDIR}/FrequencyRangesCache_nomain.o: ${OBJECTDIR}/FrequencyRangesCache.o FrequencyRangesCache.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/FrequencyRangesCache.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FrequencyRangesCache_nomain.o FrequencyRangesCache.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/FrequencyRangesCache.o ${OBJECTDIR}/FrequencyRangesCache_nomain.o;\
-	fi
 
 ${OBJECTDIR}/GoogleAPIClient_nomain.o: ${OBJECTDIR}/GoogleAPIClient.o GoogleAPIClient.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -188,6 +181,32 @@ ${OBJECTDIR}/Request_nomain.o: ${OBJECTDIR}/Request.o Request.cpp
 	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Request_nomain.o Request.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Request.o ${OBJECTDIR}/Request_nomain.o;\
+	fi
+
+${OBJECTDIR}/SpectrumChannelsCache_nomain.o: ${OBJECTDIR}/SpectrumChannelsCache.o SpectrumChannelsCache.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/SpectrumChannelsCache.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumChannelsCache_nomain.o SpectrumChannelsCache.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/SpectrumChannelsCache.o ${OBJECTDIR}/SpectrumChannelsCache_nomain.o;\
+	fi
+
+${OBJECTDIR}/SpectrumManager_nomain.o: ${OBJECTDIR}/SpectrumManager.o SpectrumManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/SpectrumManager.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumManager_nomain.o SpectrumManager.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/SpectrumManager.o ${OBJECTDIR}/SpectrumManager_nomain.o;\
 	fi
 
 ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp 

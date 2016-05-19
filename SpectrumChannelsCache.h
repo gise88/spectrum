@@ -17,41 +17,33 @@
 
 
 
-#ifndef FREQUENCYRANGESCACHE_H
-#define FREQUENCYRANGESCACHE_H
+#ifndef SPECTRUMCHANNELSCACHE_H
+#define SPECTRUMCHANNELSCACHE_H
 
-#include <iostream>
-#include <cstdlib>
-#include <string>
 #include <list>
 #include <vector>
 
-#include "Singleton.h"
-#include "ProjectionMapper.h"
-
-
-struct FrequencyRange {
+struct SpectrumChannel {
+	uint number;
 	double maxPowerDBm;
-	unsigned int startHz;
-	unsigned int stopHz;
 	
 #ifdef DEBUG
 	char __toStringBuffer[100];
 	const char* toString() {
-		snprintf(__toStringBuffer, 100, "DBm:%lf, startHZ:%d, stopHz:%d", maxPowerDBm, startHz, stopHz);
+		snprintf(__toStringBuffer, 100, "#%d  DBm:%lf", number, maxPowerDBm);
 		return __toStringBuffer;
 	}
 #endif
 	
-	FrequencyRange(double powerDBm, unsigned int startHz, unsigned int stopHz)
-    : maxPowerDBm(powerDBm), startHz(startHz), stopHz(stopHz) {}
+	SpectrumChannel(uint number, double powerDBm)
+    :  number(number), maxPowerDBm(powerDBm) {}
 	
-	FrequencyRange(FrequencyRange *item)
-	: maxPowerDBm(item->maxPowerDBm), startHz(item->startHz), stopHz(item->stopHz) {}
+	SpectrumChannel(SpectrumChannel *item)
+	: number(item->number), maxPowerDBm(item->maxPowerDBm) {}
 };
 
 
-class FrequencyRangesCache : public Singleton<FrequencyRangesCache> {
+class SpectrumChannelsCache {
 public:
 	
 	class Entry {
@@ -59,23 +51,22 @@ public:
 		Entry();
 		virtual ~Entry();
 		
-		void push(FrequencyRange *item);
-		const std::list<FrequencyRange> get();
+		void push(SpectrumChannel *item);
+		const std::vector<SpectrumChannel> get();
 		
 	private:
-		std::list<FrequencyRange> m_Ranges;
+		std::vector<SpectrumChannel> m_Channels;
     };
 	
-	FrequencyRangesCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
-	virtual ~FrequencyRangesCache();
+	SpectrumChannelsCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
+	virtual ~SpectrumChannelsCache();
 	
-	void push(uint x, uint y, FrequencyRange *item);
-	void push(uint x, uint y, std::list<FrequencyRange *> list);
-	const std::list<FrequencyRange> get(uint x, uint y);
+	void push(uint x, uint y, SpectrumChannel *item);
+	void push(uint x, uint y, std::list<SpectrumChannel *> list);
+	const std::vector<SpectrumChannel> get(uint x, uint y);
 	
 private:
 	
-	ProjectionMapper m_ProjectionMapper;
 	std::vector< std::vector<Entry *> > m_Entries;
 	
 	uint m_CellWidthCount;

@@ -18,22 +18,17 @@
 #include <math.h>
 #include <string.h>
 #include "Utilities.h"
-#include "SpectrumConstants.h"
-#include "FrequencyRangesCache.h"
+#include "SpectrumChannelsCache.h"
 
 
 
-
-// global singleton instance of FrequencyRangesCache class
-static FrequencyRangesCache gs_instance_frequency_ranges_cache(44.494198, 11.346721, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE, CELL_SIDE_SIZE);
 
 /*
 	FrequencyRangesCache
  */
 
-FrequencyRangesCache::FrequencyRangesCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size)
-:m_ProjectionMapper(SW_lat, SW_lon, area_width, area_height, cell_side_size) {
-	LogD(0, "FrequencyRangesCache()\n");
+SpectrumChannelsCache::SpectrumChannelsCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size) {
+	LogD(0, "FrequencyRangesCache(%lf, %lf, %.2lf, %.2lf, %.2lf)\n", SW_lat, SW_lon, area_width, area_height, cell_side_size);
 	
 	if (cell_side_size == 0.0)
 		DieWithError(1, "cell length side cannot be zero!");
@@ -58,14 +53,14 @@ FrequencyRangesCache::FrequencyRangesCache(double SW_lat, double SW_lon, double 
 	}
 }
 
-FrequencyRangesCache::~FrequencyRangesCache() {
+SpectrumChannelsCache::~SpectrumChannelsCache() {
 	LogD(0, "~FrequencyRangesCache()\n");
 	for (auto x_item : m_Entries)
 		for (auto y_item : x_item)
 			delete y_item;
 }
 
-void FrequencyRangesCache::push(uint x, uint y, FrequencyRange *item) {
+void SpectrumChannelsCache::push(uint x, uint y, SpectrumChannel *item) {
 	LogD(0, "FrequencyRangesCache::push(%d, %d, {%s})\n", x, y, item->toString());
 	if (x >= m_CellWidthCount)
 		throw MakeException(std::out_of_range, "x (" + std::to_string(x) + ") out of range: ");
@@ -74,13 +69,13 @@ void FrequencyRangesCache::push(uint x, uint y, FrequencyRange *item) {
 	m_Entries[x][y]->push(item);
 }
 
-void FrequencyRangesCache::push(uint x, uint y, std::list<FrequencyRange *> list) {
+void SpectrumChannelsCache::push(uint x, uint y, std::list<SpectrumChannel *> list) {
 	LogD(0, "FrequencyRangesCache::push(%d, %d, list)\n", x, y);
-	for (FrequencyRange *item : list)
+	for (SpectrumChannel *item : list)
 		this->push(x, y, item);
 }
 
-const std::list<FrequencyRange> FrequencyRangesCache::get(uint x, uint y) {
+const std::vector<SpectrumChannel> SpectrumChannelsCache::get(uint x, uint y) {
 	LogD(0, "FrequencyRangesCache::get(%d, %d)\n", x, y);
 	return m_Entries[x][y]->get();
 }
@@ -89,20 +84,20 @@ const std::list<FrequencyRange> FrequencyRangesCache::get(uint x, uint y) {
 	FrequencyRangesCache::Entry
  */
 
-FrequencyRangesCache::Entry::Entry() {
+SpectrumChannelsCache::Entry::Entry() {
 	LogD(0, "Entry()\n");
 }
 
-FrequencyRangesCache::Entry::~Entry() {
+SpectrumChannelsCache::Entry::~Entry() {
 	LogD(0, "~Entry()\n");
 }
 
-void FrequencyRangesCache::Entry::push(FrequencyRange *item) {
+void SpectrumChannelsCache::Entry::push(SpectrumChannel *item) {
 	LogD(0, "FrequencyRangesCache::Entry::push({%s})\n", item->toString());
-	m_Ranges.push_back(*item);
+	m_Channels.push_back(*item);
 }
 
-const std::list<FrequencyRange> FrequencyRangesCache::Entry::get() {
+const std::vector<SpectrumChannel> SpectrumChannelsCache::Entry::get() {
 	LogD(0, "FrequencyRangesCache::Entry::get()\n");
-	return m_Ranges;
+	return m_Channels;
 }

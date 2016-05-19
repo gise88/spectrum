@@ -20,7 +20,6 @@
 #include "Log.h"
 #include "Utilities.h"
 #include "Request.h"
-#include "Exceptions.h"
 #include "SpectrumConstants.h"
 #include "GoogleAPIClient.h"
 

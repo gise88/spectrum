@@ -30,7 +30,7 @@ template <typename T> class Singleton {
 public:
 
 	Singleton() {
-		printf("Singleton()\n"); fflush(stdout);
+		//printf("Singleton()\n"); fflush(stdout);
 		assert(!ms_singleton);
 #ifdef ENVIRONMENT64
 		ulong offset = (ulong) (T*) 1 - (ulong) (Singleton <T>*) (T*) 1;
