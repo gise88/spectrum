@@ -35,8 +35,8 @@ public:
 	
 	
 private:
-	static std::string	m_google_spectrum_api_key;
-	static unsigned int m_request_count;
+	static std::string	m_GoogleSpectrumAPIKey;
+	static unsigned int m_RequestCount;
 };
 
 #endif /* GOOGLEAPICLIENT_H */

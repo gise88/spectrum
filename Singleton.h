@@ -30,32 +30,42 @@ template <typename T> class Singleton {
 public:
 
 	Singleton() {
+		printf("Singleton()\n"); fflush(stdout);
 		assert(!ms_singleton);
+#ifdef ENVIRONMENT64
 		ulong offset = (ulong) (T*) 1 - (ulong) (Singleton <T>*) (T*) 1;
 		ms_singleton = (T*) ((ulong) this +offset);
+#else
+		uint offset = (uint) (T*) 1 - (uint) (Singleton <T>*) (T*) 1;
+		ms_singleton = (T*) ((uint) this +offset);
+#endif
 	}
 
 	virtual ~Singleton() {
+		//printf("~Singleton()\n"); fflush(stdout);
 		assert(ms_singleton);
 		ms_singleton = 0;
 	}
 
 	__PRE_FORCEINLINE__ static T & Instance() __POST_FORCEINLINE__ {
+		//printf("Instance()\n"); fflush(stdout);
 		assert(ms_singleton);
 		return (*ms_singleton);
 	}
 
 	__PRE_FORCEINLINE__ static T * InstancePtr() __POST_FORCEINLINE__ {
+		//printf("InstancePtr()\n"); fflush(stdout);
 		return (ms_singleton);
 	}
 
 	__PRE_FORCEINLINE__ static T & instance() __POST_FORCEINLINE__ {
+		//printf("instance()\n"); fflush(stdout);
 		assert(ms_singleton);
 		return (*ms_singleton);
 	}
 	
 	
-private:
+protected:
 	static T * ms_singleton;
 };
 

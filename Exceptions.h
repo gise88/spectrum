@@ -28,42 +28,51 @@
 #include <iostream>       // std::cout
 #include <exception>      // std::exception
 #include <cstring>        // std::strlen, std::strcpy
+#include <stdexcept>
+#include "Log.h"
+
+
+
+
+#define EXCEPTION_HEADER	"[EXCEPTION](" __LOCATION__ ") "
+#define MakeException(type, text)\
+		type(std::string(EXCEPTION_HEADER) + text)
 
 
 class JsonParseException : public std::exception {
-	char* m_text;
+	char* m_Text;
 public:
 
-	JsonParseException(const char* text) {
-		m_text = new char[strlen(text) + 1];
-		strcpy(m_text, text);
+	JsonParseException(std::string text) {
+		m_Text = new char[text.length() + 1];
+		strcpy(m_Text, text.c_str());
 	}
 
 	~JsonParseException() throw () {
-		delete[] m_text;
+		delete[] m_Text;
 	}
 
 	const char* what() const noexcept {
-		return m_text;
+		return m_Text;
 	}
 };
 
 
 class CURLErrorException : public std::exception {
-	char* m_text;
+	char* m_Text;
 public:
 
-	CURLErrorException(const char* text) {
-		m_text = new char[strlen(text) + 1];
-		strcpy(m_text, text);
+	CURLErrorException(std::string text) {
+		m_Text = new char[text.length() + 1];
+		strcpy(m_Text, text.c_str());
 	}
 
 	~CURLErrorException() throw () {
-		delete[] m_text;
+		delete[] m_Text;
 	}
 
 	const char* what() const noexcept {
-		return m_text;
+		return m_Text;
 	}
 };
 

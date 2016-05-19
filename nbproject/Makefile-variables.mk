@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=CLang-Linux
 CND_ARTIFACT_DIR_Debug=dist/Debug/CLang-Linux
-CND_ARTIFACT_NAME_Debug=spectrumtmp
-CND_ARTIFACT_PATH_Debug=dist/Debug/CLang-Linux/spectrumtmp
+CND_ARTIFACT_NAME_Debug=spectrum
+CND_ARTIFACT_PATH_Debug=dist/Debug/CLang-Linux/spectrum
 CND_PACKAGE_DIR_Debug=dist/Debug/CLang-Linux/package
-CND_PACKAGE_NAME_Debug=spectrumtmp.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/CLang-Linux/package/spectrumtmp.tar
+CND_PACKAGE_NAME_Debug=spectrum.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/CLang-Linux/package/spectrum.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux
-CND_ARTIFACT_NAME_Release=spectrumtmp
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/spectrumtmp
+CND_ARTIFACT_NAME_Release=spectrum
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/spectrum
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux/package
-CND_PACKAGE_NAME_Release=spectrumtmp.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/spectrumtmp.tar
+CND_PACKAGE_NAME_Release=spectrum.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/spectrum.tar
 #
 # include compiler specific variables
 #

@@ -16,38 +16,37 @@
  */
 
 
-#ifndef CURLGLOBAL_H
-#define CURLGLOBAL_H
+
+#ifndef PROJECTIONMAPPER_H
+#define PROJECTIONMAPPER_H
+
+#include <proj_api.h>
 
 
-
-/* libcurl (http://curl.haxx.se/libcurl/c) */
-#include <curl/curl.h>
-#include "Log.h"
-
-#include "Singleton.h"
-
-class CurlGlobal : public Singleton<CurlGlobal> {
+class ProjectionMapper {
 public:
-
-	CurlGlobal() {
-		LogD(0, "CurlGlobal()\n");
-		// sets up the program environment that libcurl needs
-		curl_global_init(CURL_GLOBAL_ALL);
+	
+	ProjectionMapper(double SW_lat, double SW_lon, double width_area, double height_area, double cell_side_size);
+	virtual ~ProjectionMapper();
+	
+	double DoSomething() {
+		return m_SWLat + m_SWLon + m_NWLat + m_NWLon + m_AreaWidth + m_AreaHeight;
 	}
+	
+private:
 
-	virtual ~CurlGlobal() {
-		LogD(0, "~CurlGlobal()\n");
-		// we're done with libcurl, so clean it up
-		curl_global_cleanup();
-	}
+	double m_SWLat;
+	double m_SWLon;
+	double m_NWLat;
+	double m_NWLon;
+	double m_AreaWidth;
+	double m_AreaHeight;
+	
+	projPJ m_PJMerc;
+	projPJ m_PJLatlng;
+	double m_OriginNorthing;
+	double m_OriginEastings;
 };
 
-
-// global singleton instance of Log class
-static CurlGlobal gs_instance_curlglobal;
-
-
-
-#endif /* CURLGLOBAL_H */
+#endif /* PROJECTIONMAPPER_H */
 

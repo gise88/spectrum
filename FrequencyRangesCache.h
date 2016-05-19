@@ -27,13 +27,28 @@
 #include <vector>
 
 #include "Singleton.h"
+#include "ProjectionMapper.h"
 
 
-typedef struct frequency_ranges_s {
+struct FrequencyRange {
 	double maxPowerDBm;
 	unsigned int startHz;
 	unsigned int stopHz;
-} frequency_ranges_t;
+	
+#ifdef DEBUG
+	char __toStringBuffer[100];
+	const char* toString() {
+		snprintf(__toStringBuffer, 100, "DBm:%lf, startHZ:%d, stopHz:%d", maxPowerDBm, startHz, stopHz);
+		return __toStringBuffer;
+	}
+#endif
+	
+	FrequencyRange(double powerDBm, unsigned int startHz, unsigned int stopHz)
+    : maxPowerDBm(powerDBm), startHz(startHz), stopHz(stopHz) {}
+	
+	FrequencyRange(FrequencyRange *item)
+	: maxPowerDBm(item->maxPowerDBm), startHz(item->startHz), stopHz(item->stopHz) {}
+};
 
 
 class FrequencyRangesCache : public Singleton<FrequencyRangesCache> {
@@ -41,29 +56,30 @@ public:
 	
 	class Entry {
 	public:
-		Entry(size_t x, size_t y);		
+		Entry();
 		virtual ~Entry();
 		
-		void push(frequency_ranges_t *item);
-		std::list<frequency_ranges_t *> get();
-		
-		size_t getPosX() { return this->m_PosX; }
-		size_t getPosY() { return this->m_PosY; }
+		void push(FrequencyRange *item);
+		const std::list<FrequencyRange> get();
 		
 	private:
-		std::list<frequency_ranges_t *> m_Ranges;
-		size_t m_PosX;
-		size_t m_PosY;
+		std::list<FrequencyRange> m_Ranges;
     };
 	
-	FrequencyRangesCache(double SW_lat, double SW_lon, double NE_lat, double NE_lon, size_t width, size_t height);
+	FrequencyRangesCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
 	virtual ~FrequencyRangesCache();
 	
-	void push(int x, int y, frequency_ranges_t *item);
-	std::list<frequency_ranges_t *> get(int x, int y);
+	void push(uint x, uint y, FrequencyRange *item);
+	void push(uint x, uint y, std::list<FrequencyRange *> list);
+	const std::list<FrequencyRange> get(uint x, uint y);
 	
 private:
-	std::vector< std::vector<Entry *> > m_entries;
+	
+	ProjectionMapper m_ProjectionMapper;
+	std::vector< std::vector<Entry *> > m_Entries;
+	
+	uint m_CellWidthCount;
+	uint m_CellHeightCount;
 };
 
 

@@ -29,7 +29,6 @@
 #include "Exceptions.h"
 
 #include "GoogleAPIClient.h"
-#include "SpectrumUtilities.h"
 #include "FrequencyRangesCache.h"
 
 using namespace std;
@@ -37,11 +36,7 @@ using JSON = nlohmann::json;
 
 #include <string>
 #include <utility>
-
-
-
-
-#define LogT(lev, ...)	if (lev>LOG_LIMIT)	Log::Instance().m_log(__VA_ARGS__)
+#include "Utilities.h"
 
 
 
@@ -59,48 +54,39 @@ int main(int argc, char** argv) {
 //		printf("%s\n\n", e.what());
 //	}
 	
-	frequency_ranges_t range1;
-	range1.maxPowerDBm = 15.2342342;
-	range1.startHz = 6000000;
-	range1.stopHz = 6500000;
 	
-	frequency_ranges_t range2;
-	range2.maxPowerDBm = -59.02934938;
-	range2.startHz = 6500000;
-	range2.stopHz = 7000000;
+	FrequencyRange range1(15.2342342, 6000000, 6500000);
+	FrequencyRange range2(-59.02934938, 6500000, 7000000);
 	
 	printf("asdasdasd\n"); fflush(stdout);
 	
 	FrequencyRangesCache &cache = FrequencyRangesCache::Instance();
-	std::list<frequency_ranges_t *> ranges = cache.get(0, 0);	
+	std::list<FrequencyRange> ranges = cache.get(0, 0);	
 	
 	for (auto item : ranges) {
-		printf("%lf  ", item->maxPowerDBm);
-		printf("%d   ", item->startHz);
-		printf("%d\n", item->stopHz);
+		printf("%lf  ", item.maxPowerDBm);
+		printf("%d   ", item.startHz);
+		printf("%d\n", item.stopHz);
 	}
 	
 	cache.push(0, 0, &range1);
 	cache.push(0, 0, &range2);
 	
-//	ranges = cache.get(0, 0);	
-//	for (auto item : ranges) {
-//		printf("%lf  ", item->maxPowerDBm);
-//		printf("%d   ", item->startHz);
-//		printf("%d\n", item->stopHz);
-//	}
+	
+	FrequencyRange range3(15.2342342, 6000000, 6500000);
+	FrequencyRange range4(15.2342342, 6000000, 6500000);
+	std::list<FrequencyRange *> list;
+	list.push_back(&range3);
+	list.push_back(&range4);
+	cache.push(1, 1, list);
 	
 	
-//	printf("distance %lf\n", utility::earth::distance(42.990967, -71.463767, 42.990967, -71.463767));
-//
-//	double destlat, destlon;
-//	utility::earth::derived_position(53.3387462, -1.8874843, &destlat, &destlon, 30000, 270.0);
-//	printf("new pos %lf    %lf\n", destlat, destlon);
-	
-
-
-	
-	
+	ranges = cache.get(0, 0);
+	for (auto item : ranges) {
+		printf("%lf  ", item.maxPowerDBm);
+		printf("%d   ", item.startHz);
+		printf("%d\n", item.stopHz);
+	}
 	
 	return 0;
 }

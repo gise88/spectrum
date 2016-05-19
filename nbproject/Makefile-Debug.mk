@@ -38,8 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/FrequencyRangesCache.o \
 	${OBJECTDIR}/GoogleAPIClient.o \
 	${OBJECTDIR}/Log.o \
+	${OBJECTDIR}/ProjectionMapper.o \
 	${OBJECTDIR}/Request.o \
-	${OBJECTDIR}/SpectrumUtilities.o \
 	${OBJECTDIR}/main.o
 
 # Test Directory
@@ -57,8 +57,8 @@ TESTOBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-ggdb -Wall -pedantic -fsanitize=address -O3 -fno-omit-frame-pointer
-CXXFLAGS=-ggdb -Wall -pedantic -fsanitize=address -O3 -fno-omit-frame-pointer
+CCFLAGS=-ggdb -Wall -pedantic -fsanitize=address -fno-omit-frame-pointer
+CXXFLAGS=-ggdb -Wall -pedantic -fsanitize=address -fno-omit-frame-pointer
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -71,11 +71,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrumtmp
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrum
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrumtmp: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrum: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrumtmp ${OBJECTFILES} ${LDLIBSOPTIONS} -lcurl -fsanitize=address
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrum ${OBJECTFILES} ${LDLIBSOPTIONS} -lm -lcurl -lproj -fsanitize=address
 
 ${OBJECTDIR}/FrequencyRangesCache.o: FrequencyRangesCache.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -92,15 +92,15 @@ ${OBJECTDIR}/Log.o: Log.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Log.o Log.cpp
 
+${OBJECTDIR}/ProjectionMapper.o: ProjectionMapper.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ProjectionMapper.o ProjectionMapper.cpp
+
 ${OBJECTDIR}/Request.o: Request.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Request.o Request.cpp
-
-${OBJECTDIR}/SpectrumUtilities.o: SpectrumUtilities.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumUtilities.o SpectrumUtilities.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -165,6 +165,19 @@ ${OBJECTDIR}/Log_nomain.o: ${OBJECTDIR}/Log.o Log.cpp
 	    ${CP} ${OBJECTDIR}/Log.o ${OBJECTDIR}/Log_nomain.o;\
 	fi
 
+${OBJECTDIR}/ProjectionMapper_nomain.o: ${OBJECTDIR}/ProjectionMapper.o ProjectionMapper.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/ProjectionMapper.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ProjectionMapper_nomain.o ProjectionMapper.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/ProjectionMapper.o ${OBJECTDIR}/ProjectionMapper_nomain.o;\
+	fi
+
 ${OBJECTDIR}/Request_nomain.o: ${OBJECTDIR}/Request.o Request.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/Request.o`; \
@@ -176,19 +189,6 @@ ${OBJECTDIR}/Request_nomain.o: ${OBJECTDIR}/Request.o Request.cpp
 	    $(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Request_nomain.o Request.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Request.o ${OBJECTDIR}/Request_nomain.o;\
-	fi
-
-${OBJECTDIR}/SpectrumUtilities_nomain.o: ${OBJECTDIR}/SpectrumUtilities.o SpectrumUtilities.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/SpectrumUtilities.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumUtilities_nomain.o SpectrumUtilities.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/SpectrumUtilities.o ${OBJECTDIR}/SpectrumUtilities_nomain.o;\
 	fi
 
 ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp 
@@ -216,7 +216,7 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrumtmp
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrum
 
 # Subprojects
 .clean-subprojects:

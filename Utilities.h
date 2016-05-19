@@ -15,26 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "definitions.h"
 
 
-#ifndef SPECTRUMUTILITIES_H
-#define SPECTRUMUTILITIES_H
+#ifndef UTILITIES_H
+#define UTILITIES_H
 
-namespace utility {
-	
-	namespace conversion {
-		__PRE_FORCEINLINE__ double deg2rad(double deg) __POST_FORCEINLINE__;
-		
-		__PRE_FORCEINLINE__ double rad2deg(double deg) __POST_FORCEINLINE__;
-	}
-	
-	namespace earth {
-		double distance(double lat1d, double lon1d, double lat2d, double lon2d);
-		
-		void derived_position(double srclat, double srclon, double *dstlat, double *dstlon, unsigned int meters, double bearing);		
-	}
-}
+#include "Log.h"
+#include <iostream>
 
-#endif /* SPECTRUMUTILITIES_H */
+
+#define FREE(x)   if (x != nullptr) { free(x); x = nullptr; }
+
+#define DieWithError(exit_code, ...) do {\
+		LogE(__VA_ARGS__);	\
+		exit(exit_code); \
+	} while(0)
+
+#define DieWithErrno(exit_code) do {\
+		LogERNO(); \
+		exit(exit_code); \
+	} while(0)
+
+#endif /* UTILITIES_H */
 

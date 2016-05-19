@@ -9,10 +9,11 @@
       <itemPath>FrequencyRangesCache.h</itemPath>
       <itemPath>GoogleAPIClient.h</itemPath>
       <itemPath>Log.h</itemPath>
+      <itemPath>ProjectionMapper.h</itemPath>
       <itemPath>Request.h</itemPath>
       <itemPath>Singleton.h</itemPath>
       <itemPath>SpectrumConstants.h</itemPath>
-      <itemPath>SpectrumUtilities.h</itemPath>
+      <itemPath>Utilities.h</itemPath>
       <itemPath>definitions.h</itemPath>
       <itemPath>json.hpp</itemPath>
     </logicalFolder>
@@ -26,8 +27,8 @@
       <itemPath>FrequencyRangesCache.cpp</itemPath>
       <itemPath>GoogleAPIClient.cpp</itemPath>
       <itemPath>Log.cpp</itemPath>
+      <itemPath>ProjectionMapper.cpp</itemPath>
       <itemPath>Request.cpp</itemPath>
-      <itemPath>SpectrumUtilities.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -56,7 +57,7 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandLine>-ggdb -Wall -pedantic -fsanitize=address -O3 -fno-omit-frame-pointer</commandLine>
+          <commandLine>-ggdb -Wall -pedantic -fsanitize=address -fno-omit-frame-pointer</commandLine>
           <preprocessorList>
             <Elem>DEBUG</Elem>
           </preprocessorList>
@@ -66,7 +67,7 @@
           <warningLevel>3</warningLevel>
         </asmTool>
         <linkerTool>
-          <commandLine>-lcurl -fsanitize=address</commandLine>
+          <commandLine>-lm -lcurl -lproj -fsanitize=address</commandLine>
         </linkerTool>
       </compileType>
       <item path="CurlGlobal.h" ex="false" tool="3" flavor2="0">
@@ -85,6 +86,10 @@
       </item>
       <item path="Log.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="ProjectionMapper.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ProjectionMapper.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Request.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Request.h" ex="false" tool="3" flavor2="0">
@@ -93,11 +98,9 @@
       </item>
       <item path="SpectrumConstants.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="SpectrumUtilities.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SpectrumUtilities.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Utilities.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="definitions.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -151,6 +154,7 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <standard>8</standard>
+          <commandLine>-Wall -pedantic</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -158,6 +162,9 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <commandLine>-lm -lcurl -lproj</commandLine>
+        </linkerTool>
       </compileType>
       <item path="CurlGlobal.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -175,6 +182,10 @@
       </item>
       <item path="Log.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="ProjectionMapper.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ProjectionMapper.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Request.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Request.h" ex="false" tool="3" flavor2="0">
@@ -183,11 +194,9 @@
       </item>
       <item path="SpectrumConstants.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="SpectrumUtilities.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SpectrumUtilities.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Utilities.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="definitions.h" ex="false" tool="3" flavor2="0">
       </item>

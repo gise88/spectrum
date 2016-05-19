@@ -38,12 +38,20 @@ class Log : public Singleton<Log> {
 public:
 
 	Log() {
-		m_path = nullptr;
+		m_Path = nullptr;
 	}
 
 	virtual ~Log() {
-		if (m_path != nullptr)
-			delete[] m_path;
+		if (m_Path != nullptr)
+			delete[] m_Path;
+	}
+	
+	// @override
+	__PRE_FORCEINLINE__ static Log & Instance() __POST_FORCEINLINE__ {
+		if (!ms_singleton)
+			ms_singleton = new Log();
+		assert(ms_singleton);
+		return (*ms_singleton);
 	}
 
 	void m_init(const char *filename);
@@ -52,12 +60,12 @@ public:
 	void m_error(const char *header, const char *fmt, ...);
 	void m_hexdump(const void *addr, size_t len, const char *desc, ...);
 
+	
 private:
 
 	void m_write(const char *fmt, va_list va_alist, bool onstderr = false);
 
-	static Log *m_instance;
-	char *m_path;
+	char *m_Path;
 };
 
 #ifdef DEBUG
@@ -86,7 +94,9 @@ private:
 
 #define LogINIT(filename)  Log::Instance().m_init(filename)
 
-#define LOG_LEVEL_MIN	0
+#ifndef LOG_LEVEL_MIN
+#define LOG_LEVEL_MIN	1
+#endif
 
 #if defined(__clang__) || defined(__GNUC__)
 
@@ -103,7 +113,8 @@ private:
 #define LogD(...)
 #endif
 
-#define LogERNO() LogE("%s\n", strerror(errno))
+#define LogERNO() LogE("Error code: %d   Error message: %s\n", errno, strerror(errno))
+
 
 
 #endif /* LOG_H */

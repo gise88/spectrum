@@ -23,17 +23,15 @@
 #include "Log.h"
 
 
-// global singleton instance of Log class
-static Log gs_instance_log;
 
 void Log::m_init(const char *filename) {
 	size_t len = strlen(filename);
-	m_path = new char[len + 1];
-	if (m_path == nullptr) {
+	m_Path = new char[len + 1];
+	if (m_Path == nullptr) {
 		fprintf(stderr, ERROR_HEADER "%s", strerror(errno));
 	} else {
-		strncpy(m_path, filename, len);
-		m_path[len] = '\0';
+		strncpy(m_Path, filename, len);
+		m_Path[len] = '\0';
 	}
 }
 
@@ -46,8 +44,8 @@ void Log::m_write(const char *fmt, va_list va_alist, bool onstderr) {
 		fflush(stderr);
 		va_end(copy);
 	}
-	if (m_path != nullptr) {
-		FILE *fp = fopen(m_path, "a");
+	if (m_Path != nullptr) {
+		FILE *fp = fopen(m_Path, "a");
 		if (fp != NULL) {
 			vfprintf(fp, fmt, va_alist);			
 			fflush(fp);

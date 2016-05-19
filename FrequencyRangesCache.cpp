@@ -15,94 +15,94 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <math.h>
 #include <string.h>
+#include "Utilities.h"
 #include "SpectrumConstants.h"
-#include "SpectrumUtilities.h"
 #include "FrequencyRangesCache.h"
 
 
 
 
 // global singleton instance of FrequencyRangesCache class
-//static FrequencyRangesCache gs_instance_frequency_ranges_cache(42.990967, -71.463767, 43.272275, -71.042922, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE);
-//static FrequencyRangesCache gs_instance_frequency_ranges_cache(50.666932, 67.019369, 57.894857, 86.202316, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE);
-//static FrequencyRangesCache gs_instance_frequency_ranges_cache(-31.294475, 123.923107, -18.996646, 141.852794, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE);
-static FrequencyRangesCache gs_instance_frequency_ranges_cache(-5.287480, 14.745823, 4.750885, 25.240604, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE);
+static FrequencyRangesCache gs_instance_frequency_ranges_cache(44.494198, 11.346721, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE, CELL_SIDE_SIZE);
 
 /*
 	FrequencyRangesCache
  */
 
-FrequencyRangesCache::FrequencyRangesCache(double SW_lat, double SW_lon, double NE_lat, double NE_lon, size_t width, size_t height) {
-	std::cout << "FrequencyRangesCache() " << std::endl;
-	fflush(stdout);
-
-	if (SW_lat + NE_lat >= 0) {
-		double lat_dist = utility::earth::distance(SW_lat, SW_lon, NE_lat, SW_lon);
-		double lon_dist = utility::earth::distance(SW_lat, SW_lon, SW_lat, NE_lon);
-
-		double lat_dist2 = utility::earth::distance(SW_lat, NE_lon, NE_lat, NE_lon);
-		double lon_dist2 = utility::earth::distance(NE_lat, SW_lon, NE_lat, NE_lon);
-		printf("lat dists:  %lf   %lf\n", lat_dist, lat_dist2);
-		printf("lon dists:  %lf   NO-%lf\n", lon_dist, lon_dist2);
-	} else { // if (SW_lat - NE_lat < 0)
-		double lat_dist = utility::earth::distance(SW_lat, SW_lon, NE_lat, SW_lon);
-		double lon_dist = utility::earth::distance(SW_lat, SW_lon, SW_lat, NE_lon);
-
-		double lat_dist2 = utility::earth::distance(SW_lat, NE_lon, NE_lat, NE_lon);
-		double lon_dist2 = utility::earth::distance(NE_lat, SW_lon, NE_lat, NE_lon);
-		printf("lat dists:  %lf   %lf\n", lat_dist, lat_dist2);
-		printf("lon dists:  NO-%lf   %lf\n", lon_dist, lon_dist2);
-	}
-
-	m_entries.reserve(width);
-	for (size_t x = 0; x < width; x++) {
+FrequencyRangesCache::FrequencyRangesCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size)
+:m_ProjectionMapper(SW_lat, SW_lon, area_width, area_height, cell_side_size) {
+	LogD(0, "FrequencyRangesCache()\n");
+	
+	if (cell_side_size == 0.0)
+		DieWithError(1, "cell length side cannot be zero!");
+	
+	if (fmod(area_width, cell_side_size) != 0.0)
+		DieWithError(1, "area_width %% cell_side_length != 0.0");
+	m_CellWidthCount = (uint) area_width/cell_side_size;
+	
+	if (fmod(area_height, cell_side_size) != 0.0)
+		DieWithError(1, "area_height %% cell_side_length != 0.0");
+	m_CellHeightCount = (uint) area_height/cell_side_size;
+	
+	LogL(1, "Cache grid dimension: %ldx%ld\n", m_CellWidthCount, m_CellHeightCount);
+	
+	m_Entries.reserve(m_CellWidthCount);
+	for (uint x = 0; x < m_CellWidthCount; x++) {
 		std::vector<Entry *> tmp;
-		m_entries.reserve(width);
-		for (size_t y = 0; y < height; y++)
-			tmp.push_back(new Entry(x, y));
-
-		m_entries.push_back(tmp);
+		m_Entries.reserve(m_CellWidthCount);
+		for (uint y = 0; y < m_CellHeightCount; y++)
+			tmp.push_back(new Entry());
+		m_Entries.push_back(tmp);
 	}
 }
 
 FrequencyRangesCache::~FrequencyRangesCache() {
-	std::cout << "~FrequencyRangesCache() " << std::endl;
-	fflush(stdout);
-	for (auto x_item : m_entries)
+	LogD(0, "~FrequencyRangesCache()\n");
+	for (auto x_item : m_Entries)
 		for (auto y_item : x_item)
 			delete y_item;
 }
 
-void FrequencyRangesCache::push(int x, int y, frequency_ranges_t *item) {
-	m_entries[x][y]->push(item);
+void FrequencyRangesCache::push(uint x, uint y, FrequencyRange *item) {
+	LogD(0, "FrequencyRangesCache::push(%d, %d, {%s})\n", x, y, item->toString());
+	if (x >= m_CellWidthCount)
+		throw MakeException(std::out_of_range, "x (" + std::to_string(x) + ") out of range: ");
+	if (y >= m_CellHeightCount)
+		throw MakeException(std::out_of_range, "y (" + std::to_string(y) + ") out of range: ");
+	m_Entries[x][y]->push(item);
 }
 
-std::list<frequency_ranges_t *> FrequencyRangesCache::get(int x, int y) {
-	return m_entries[x][y]->get();
+void FrequencyRangesCache::push(uint x, uint y, std::list<FrequencyRange *> list) {
+	LogD(0, "FrequencyRangesCache::push(%d, %d, list)\n", x, y);
+	for (FrequencyRange *item : list)
+		this->push(x, y, item);
+}
+
+const std::list<FrequencyRange> FrequencyRangesCache::get(uint x, uint y) {
+	LogD(0, "FrequencyRangesCache::get(%d, %d)\n", x, y);
+	return m_Entries[x][y]->get();
 }
 
 /*
 	FrequencyRangesCache::Entry
  */
 
-FrequencyRangesCache::Entry::Entry(size_t x, size_t y)
-: m_PosX(x), m_PosY(y) {
-	//std::cout << "Entry()" << std::endl; fflush(stdout);
+FrequencyRangesCache::Entry::Entry() {
+	LogD(0, "Entry()\n");
 }
 
 FrequencyRangesCache::Entry::~Entry() {
-	//std::cout << "~Entry()" << std::endl; fflush(stdout);
-	for (auto item : m_Ranges)
-		free(item);
+	LogD(0, "~Entry()\n");
 }
 
-void FrequencyRangesCache::Entry::push(frequency_ranges_t *item) {
-	frequency_ranges_t *ptr = (frequency_ranges_t *) malloc(sizeof (frequency_ranges_t));
-	memcpy(ptr, item, sizeof (frequency_ranges_t));
-	m_Ranges.push_back(ptr);
+void FrequencyRangesCache::Entry::push(FrequencyRange *item) {
+	LogD(0, "FrequencyRangesCache::Entry::push({%s})\n", item->toString());
+	m_Ranges.push_back(*item);
 }
 
-std::list<frequency_ranges_t *> FrequencyRangesCache::Entry::get() {
+const std::list<FrequencyRange> FrequencyRangesCache::Entry::get() {
+	LogD(0, "FrequencyRangesCache::Entry::get()\n");
 	return m_Ranges;
 }

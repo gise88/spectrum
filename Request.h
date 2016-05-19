@@ -42,18 +42,8 @@ struct curl_answer_s {
 class Request {
 public:
 
-	Request(std::string url)
-	: m_Url(url) {
-		this->m_Timeout = 5;
-		this->m_MaxRedirect = 1;
-	}
-
-	Request(const Request& orig) {
-	}
-
-	virtual ~Request() {
-		std::cout << "~Request(): " << this->m_Url << std::endl;
-	}
+	Request(std::string url);
+	virtual ~Request();
 
 	void	SetTimeout(int sec);
 	void	SetMaxRedirect(int num);

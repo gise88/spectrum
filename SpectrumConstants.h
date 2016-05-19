@@ -28,8 +28,10 @@
 #define GOOGLE_SPECTRUM_API_KEY_FILE	"GoogleSpectrumApiKey.txt"
 #define GOOGLE_SPECTRUM_API_URL			"https://www.googleapis.com/rpc"
 
-#define AREA_WIDTH_SIZE		50 //meters
-#define AREA_HEIGHT_SIZE	50 //meters
+#define AREA_WIDTH_SIZE		600 //meters
+#define AREA_HEIGHT_SIZE	500 //meters
+
+#define CELL_SIDE_SIZE	50 //meters
 
 
 

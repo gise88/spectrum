@@ -16,13 +16,13 @@
  */
 
 #include <fstream>
+
 #include "Log.h"
+#include "Utilities.h"
 #include "Request.h"
 #include "Exceptions.h"
-
 #include "SpectrumConstants.h"
 #include "GoogleAPIClient.h"
-
 
 
 
@@ -32,26 +32,25 @@ static std::string readGoogleSpectrumApiKeyFromFile() {
 
 	if (infile.good())
 		getline(infile, apiKey);
-	else {
-		LogE("The file \"" GOOGLE_SPECTRUM_API_KEY_FILE "\" has not been found!\nYou have to create it with the only Google Spectrum Key.");
-		exit(1);
-	}
+	else
+		DieWithError(1, "The file \"" GOOGLE_SPECTRUM_API_KEY_FILE "\" has not been found!\nYou have to create it with the only Google Spectrum Key.");
 	
 	infile.close();
 	return apiKey;
 }
 
 // initialize static members in the GoogleAPIClient class
-unsigned int GoogleAPIClient::m_request_count = 0;
-std::string GoogleAPIClient::m_google_spectrum_api_key = readGoogleSpectrumApiKeyFromFile();
+unsigned int GoogleAPIClient::m_RequestCount = 0;
+std::string GoogleAPIClient::m_GoogleSpectrumAPIKey = readGoogleSpectrumApiKeyFromFile();
+
 
 
 JSON GoogleAPIClient::PostAPI(double latitude, double longitude, double antenna_height) {
-
+	
 	// from: https://developers.google.com/spectrum/paws/gettingstarted#try-out-google-spectrum-database
 	Request req(GOOGLE_SPECTRUM_API_URL);
 	req.SetTimeout(10);
-
+	
 	JSON data = {
 		{"jsonrpc", "2.0"},
 		{"method", "spectrum.paws.getSpectrum"},
@@ -75,8 +74,7 @@ JSON GoogleAPIClient::PostAPI(double latitude, double longitude, double antenna_
 										{"latitude", latitude},
 										{"longitude", longitude}
 									}}
-							}}
-					}},
+							}}}},
 				{"antenna",
 					{
 						{"height", antenna_height},
@@ -85,21 +83,22 @@ JSON GoogleAPIClient::PostAPI(double latitude, double longitude, double antenna_
 				{"capabilities",
 					{
 						{"frequencyRanges",
-							//							{
-							//								{
-							//									{"startHz", 800000000},
-							//									{"stopHz", 850000000}
-							//								},
-							//								{
-							//									{"startHz", 900000000},
-							//									{"stopHz", 950000000}
-							//								}
-							//							}
-							JSON::object()}
+//							{
+//								{
+//									{"startHz", 800000000},
+//									{"stopHz", 850000000}
+//								},
+//								{
+//									{"startHz", 900000000},
+//									{"stopHz", 950000000}
+//								}
+//							}
+								JSON::object()
+						}
 					}},
-				{"key", GoogleAPIClient::m_google_spectrum_api_key}
+				{"key", GoogleAPIClient::m_GoogleSpectrumAPIKey}
 			}},
-		{"id", std::string("SpectrumRequestNumber-").append(std::to_string(GoogleAPIClient::m_request_count++))}
+		{"id", std::string("SpectrumRequestNumber-").append(std::to_string(GoogleAPIClient::m_RequestCount++))}
 	};
 
 	return req.PostJSON(data);
