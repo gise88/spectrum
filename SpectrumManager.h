@@ -20,11 +20,18 @@
 #ifndef SPECTRUMMANAGER_H
 #define SPECTRUMMANAGER_H
 
+#include <list>
 #include <vector>
+
+#include "json.hpp"  // https://github.com/nlohmann/json
+using JSON = nlohmann::json;
 
 #include "Singleton.h"
 #include "SpectrumChannelsCache.h"
 #include "ProjectionMapper.h"
+
+
+
 
 class SpectrumManager : public Singleton<SpectrumManager> {
 public:
@@ -34,10 +41,14 @@ public:
 	const std::vector<SpectrumChannel> GetChannels(uint pos_x, uint pos_y, double antenna_height = 30.0);
 	
 private:
-
+	
+	std::vector<SpectrumChannel> JSONSpectrum2SpectrumChannels(JSON& res);
+	
+	
 	bool m_UseCache;
 	ProjectionMapper m_ProjectionMapper;
-	SpectrumChannelsCache m_ChannelsCache;
+	SpectrumChannelsCache *m_ChannelsCache;
+	
 };
 
 #endif /* SPECTRUMMANAGER_H */

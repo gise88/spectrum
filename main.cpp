@@ -26,31 +26,47 @@
 
 #include "Log.h"
 #include "Exceptions.h"
-
-#include "GoogleAPIClient.h"
+#include "SpectrumConstants.h"
 #include "SpectrumManager.h"
 
-using namespace std;
-
-#include <string>
-#include <utility>
 #include "Utilities.h"
 
-
+// global singleton instance of SpectrumManager class
+static SpectrumManager gs_instance_spectrum_manager(42.0986, -75.9183, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE, CELL_SIDE_SIZE);
+//static SpectrumManager gs_instance_spectrum_manager(40.814194, -73.501308, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE, CELL_SIDE_SIZE);
 
 /*
  * 
  */
 int main(int argc, char** argv) {
-	
-//	try {
-//		JSON res = GoogleAPIClient::PostAPI(42.0986, -75.9183, 30.0);
-//		printf("res: %s\n\n", res.dump(2).c_str());
-//	} catch (JsonParseException &e) {
-//		printf("%s\n\n", e.what());
-//	} catch (CURLErrorException &e) {
-//		printf("%s\n\n", e.what());
-//	}
-	
+
+	try {
+		SpectrumManager &spectrumManager = SpectrumManager::Instance();
+		
+		// cache is clean so need to download all the data
+		spectrumManager.GetChannels(0, 0, 30);
+		spectrumManager.GetChannels(50, 0, 30);
+		spectrumManager.GetChannels(0, 50, 30);
+		spectrumManager.GetChannels(0, 100, 30);
+		spectrumManager.GetChannels(100, 0, 30);
+		
+		// cache is clean so need to download all the data
+		spectrumManager.GetChannels(0, 0, 30);
+		spectrumManager.GetChannels(50, 0, 30);
+		spectrumManager.GetChannels(0, 50, 30);
+		spectrumManager.GetChannels(0, 100, 30);
+		spectrumManager.GetChannels(100, 0, 30);
+		
+	} catch (CURLErrorException &e) {
+		printf("%s\n\n", e.what());
+	} catch (JsonParseException &e) {
+		printf("%s\n\n", e.what());
+	} catch (JsonWithErrorException &e) {
+		printf("%s\n\n", e.what());
+	} catch (std::out_of_range &e) {
+		printf("%s\n\n", e.what());
+	}
+
+
 	return 0;
 }

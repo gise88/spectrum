@@ -15,30 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* 
- * File:   SpectrumConstants.h
- * Author: Gianluca Iselli <gianluca.iselli@gmail.com>
- *
- * Created on May 11, 2016, 5:49 PM
- */
-
-#ifndef SPECTRUMCONSTANTS_H
-#define SPECTRUMCONSTANTS_H
-
-#define GOOGLE_SPECTRUM_API_KEY_FILE	"GoogleSpectrumApiKey.txt"
-#define GOOGLE_SPECTRUM_API_URL			"https://www.googleapis.com/rpc"
-
-#define AREA_WIDTH_SIZE		200 //meters
-#define AREA_HEIGHT_SIZE	150 //meters
-
-#define CELL_SIDE_SIZE	50 //meters
 
 
-#define FIRST_CHANNEL_AVAILABLE		21
-#define FIRST_CHANNEL_AVAILABLE_HZ  512000000
+#ifndef SPECTRUMCHANNELSCACHEFACTORY_H
+#define SPECTRUMCHANNELSCACHEFACTORY_H
 
+#include "SpectrumChannelsCache.h"
 
+class SpectrumChannelsCacheFactory {
+public:
+	
+	static SpectrumChannelsCache* CreateSpectrumChannelsCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
+};
 
-
-#endif /* SPECTRUMCONSTANTS_H */
+#endif /* SPECTRUMCHANNELSCACHEFACTORY_H */
 

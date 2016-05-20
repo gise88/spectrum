@@ -58,6 +58,25 @@ public:
 };
 
 
+class JsonWithErrorException : public std::exception {
+	char* m_Text;
+public:
+
+	JsonWithErrorException(std::string text) {
+		m_Text = new char[text.length() + 1];
+		strcpy(m_Text, text.c_str());
+	}
+
+	~JsonWithErrorException() throw () {
+		delete[] m_Text;
+	}
+
+	const char* what() const noexcept {
+		return m_Text;
+	}
+};
+
+
 class CURLErrorException : public std::exception {
 	char* m_Text;
 public:

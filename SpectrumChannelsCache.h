@@ -46,6 +46,15 @@ struct SpectrumChannel {
 class SpectrumChannelsCache {
 public:
 	
+	SpectrumChannelsCache(uint cell_width_count, uint cell_height_count);
+	virtual ~SpectrumChannelsCache();
+	
+	void push(uint x, uint y, SpectrumChannel *item);
+	void push(uint x, uint y, std::vector<SpectrumChannel>& vec);
+	const std::vector<SpectrumChannel> get(uint x, uint y);
+	
+private:
+	
 	class Entry {
 	public:
 		Entry();
@@ -58,15 +67,6 @@ public:
 		std::vector<SpectrumChannel> m_Channels;
     };
 	
-	SpectrumChannelsCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
-	virtual ~SpectrumChannelsCache();
-	
-	void push(uint x, uint y, SpectrumChannel *item);
-	void push(uint x, uint y, std::list<SpectrumChannel *> list);
-	const std::vector<SpectrumChannel> get(uint x, uint y);
-	
-private:
-	
 	std::vector< std::vector<Entry *> > m_Entries;
 	
 	uint m_CellWidthCount;
@@ -74,5 +74,5 @@ private:
 };
 
 
-#endif /* FREQUENCYRANGESCACHE_H */
+#endif /* SPECTRUMCHANNELSCACHE_H */
 

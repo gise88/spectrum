@@ -15,8 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -29,13 +27,13 @@
 
 Request::Request(std::string url)
 : m_Url(url) {
-	LogD(0, "Request(%s)", url.c_str());
+	LogD(0, "Request(%s)\n", url.c_str());
 	this->m_Timeout = 5;
 	this->m_MaxRedirect = 1;
 }
 
 Request::~Request() {
-	LogD(0, "~Request()");
+	LogD(0, "~Request()\n");
 }
 
 void Request::SetTimeout(int sec) {
@@ -115,7 +113,7 @@ CURLcode Request::PerformPost(const char *data, struct curl_slist *headers, stru
 	return ret;
 }
 
-CURLcode Request::PerformJSONPost(JSON obj, struct curl_answer_s *p_answer) {
+CURLcode Request::PerformJSONPost(JSON& obj, struct curl_answer_s *p_answer) {
 	LogD(0, "PerformJSONPost(*obj*, *p_answer*)\n");
 	CURLcode ret;
 	struct curl_slist *headers = nullptr;
@@ -133,7 +131,7 @@ CURLcode Request::PerformJSONPost(JSON obj, struct curl_answer_s *p_answer) {
 	return ret;
 }
 
-JSON Request::PostJSON(JSON data) {
+JSON Request::PostJSON(JSON& data) {
 	LogD(0, "PostJSON(*data*)\n");
 	CURLcode ret;
 	struct curl_answer_s answer;
@@ -143,7 +141,7 @@ JSON Request::PostJSON(JSON data) {
 	answer.size = 0;
 
 	ret = this->PerformJSONPost(data, &answer);
-
+	
 	// check for errors
 	if (ret != CURLE_OK) {
 		LogE("curl_easy_perform() failed: %s\n", curl_easy_strerror(ret));

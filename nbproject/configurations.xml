@@ -12,6 +12,7 @@
       <itemPath>Request.h</itemPath>
       <itemPath>Singleton.h</itemPath>
       <itemPath>SpectrumChannelsCache.h</itemPath>
+      <itemPath>SpectrumChannelsCacheFactory.h</itemPath>
       <itemPath>SpectrumConstants.h</itemPath>
       <itemPath>SpectrumManager.h</itemPath>
       <itemPath>Utilities.h</itemPath>
@@ -30,6 +31,7 @@
       <itemPath>ProjectionMapper.cpp</itemPath>
       <itemPath>Request.cpp</itemPath>
       <itemPath>SpectrumChannelsCache.cpp</itemPath>
+      <itemPath>SpectrumChannelsCacheFactory.cpp</itemPath>
       <itemPath>SpectrumManager.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -97,6 +99,10 @@
       <item path="SpectrumChannelsCache.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SpectrumChannelsCache.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SpectrumChannelsCacheFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SpectrumChannelsCacheFactory.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SpectrumConstants.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -197,6 +203,10 @@
       <item path="SpectrumChannelsCache.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SpectrumChannelsCache.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SpectrumChannelsCacheFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SpectrumChannelsCacheFactory.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SpectrumConstants.h" ex="false" tool="3" flavor2="0">
       </item>

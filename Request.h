@@ -47,7 +47,7 @@ public:
 
 	void	SetTimeout(int sec);
 	void	SetMaxRedirect(int num);
-	JSON	PostJSON(JSON data);
+	JSON	PostJSON(JSON& data);
 
 private:
 	std::string	m_Url;
@@ -56,7 +56,7 @@ private:
 	int			m_MaxRedirect;
 	
 	CURLcode	PerformPost(const char *data, struct curl_slist *headers, struct curl_answer_s *p_answer);
-	CURLcode	PerformJSONPost(JSON obj, struct curl_answer_s *p_answer);
+	CURLcode	PerformJSONPost(JSON& obj, struct curl_answer_s *p_answer);
 };
 
 

@@ -45,7 +45,7 @@ ProjectionMapper::ProjectionMapper(double SW_lat, double SW_lon, double area_wid
 	m_NWLat = y * RAD_TO_DEG;
 	m_NWLon = x * RAD_TO_DEG;
 	
-	LogL(1, "m_NWLat: %lf, m_NWLon: %lf\n", m_NWLat, m_NWLon);
+	LogD(1, "NWLat: %lf, NWLon: %lf\n", m_NWLat, m_NWLon);
 }
 
 ProjectionMapper::~ProjectionMapper() {
@@ -62,8 +62,10 @@ void ProjectionMapper::LocalPosXY2LatLng(uint pos_x, uint pos_y, double& lat, do
 	if (pos_y > m_AreaHeight)
 		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") > m_AreaHeight");
 	
-	lat = ((m_NWLat - m_SWLat) / m_AreaWidth) * pos_x;
-	lng = ((m_NWLon - m_SWLon) / m_AreaHeight) * pos_y;
+	lat = m_SWLat + ((m_NWLat - m_SWLat) / m_AreaWidth) * pos_x;
+	lng = m_SWLon + ((m_NWLon - m_SWLon) / m_AreaHeight) * pos_y;
+	
+	LogD(1, "LocalPosXY2LatLng - lat: %lf    lng: %lf\n", lat, lng);
 }
 
 void ProjectionMapper::LocalPosXY2IndexXY(uint pos_x, uint pos_y, uint& idx_x, uint& idx_y) {
