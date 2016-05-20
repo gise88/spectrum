@@ -53,6 +53,10 @@ const std::vector<SpectrumChannel> SpectrumManager::GetChannels(uint pos_x, uint
 		}
 	}
 	
+	
+	// convert the JSON result into the vector of SpectrumChannel, 
+	// push the new informations into the cache and return these values
+	
 	m_ProjectionMapper.LocalPosXY2LatLng(pos_x, pos_y, lat, lng);
 	LogL(5, "GoogleAPIClient::PostAPI(lat: %lf, lng: %lf)\n", lat, lng);
 	JSON res = GoogleAPIClient::PostAPI(lat, lng, antenna_height);
@@ -60,9 +64,6 @@ const std::vector<SpectrumChannel> SpectrumManager::GetChannels(uint pos_x, uint
 	
 	if (m_UseCache)
 		m_ChannelsCache->push(x, y, cache);
-	
-	// convert the JSON result into the vector of SpectrumChannel, 
-	// push the new informations into the cache and return these values
 	
 	return cache;
 }
