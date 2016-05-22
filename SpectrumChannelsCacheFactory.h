@@ -20,12 +20,14 @@
 #ifndef SPECTRUMCHANNELSCACHEFACTORY_H
 #define SPECTRUMCHANNELSCACHEFACTORY_H
 
-#include "SpectrumChannelsCache.h"
+#include "SpectrumChannelsRAMCache.h"
+#include "IConfiguration.h"
+
 
 class SpectrumChannelsCacheFactory {
 public:
 	
-	static SpectrumChannelsCache* CreateSpectrumChannelsCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
+	static SpectrumChannelsRAMCache* CreateSpectrumChannelsRAMCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
 };
 
 #endif /* SPECTRUMCHANNELSCACHEFACTORY_H */

@@ -19,22 +19,39 @@
 #define GOOGLEAPICLIENT_H
 
 
-#include "json.hpp"		// https://github.com/nlohmann/json
-
 #include <iostream>
 #include <cstdlib>
 #include <string>
+
+#include "json.hpp"		// https://github.com/nlohmann/json
+
+#include "ASpectrumApiClient.h"
+#include "enum.h"
+
 
 
 using JSON = nlohmann::json;
 
 
-class GoogleAPIClient {
+BETTER_ENUM(DeviceType, char, FIXED, MODE_1, MODE_2);
+
+class GoogleAPIClient : public ASpectrumApiClient {
 public:
-	static JSON PostAPI(double latitude, double longitude, double antenna_height);
 	
+	GoogleAPIClient();
+	GoogleAPIClient(double antenna_height, DeviceType type);
+	virtual ~GoogleAPIClient();
+	
+	std::vector<SpectrumChannel> GetSpectrumChannels(double latitude, double longitude) override; // from ASpectrumApiClient
+	std::string GetCurrentConfiguration() override; // from IConfiguration
 	
 private:
+	
+	std::vector<SpectrumChannel> JSONSpectrum2SpectrumChannels(JSON&& res);
+	
+	double m_AntennaHeight;
+	std::string m_DeviceType;
+	
 	static std::string	m_GoogleSpectrumAPIKey;
 	static unsigned int m_RequestCount;
 };

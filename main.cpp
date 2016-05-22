@@ -30,6 +30,7 @@
 #include "SpectrumManager.h"
 
 #include "Utilities.h"
+#include "GoogleAPIClient.h"
 
 // global singleton instance of SpectrumManager class
 static SpectrumManager gs_instance_spectrum_manager(42.0986, -75.9183, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE, CELL_SIDE_SIZE);
@@ -40,22 +41,28 @@ static SpectrumManager gs_instance_spectrum_manager(42.0986, -75.9183, AREA_WIDT
  */
 int main(int argc, char** argv) {
 
-	try {
-		SpectrumManager &spectrumManager = SpectrumManager::Instance();
+	SpectrumManager &spectrumManager = SpectrumManager::Instance();
+	std::unique_ptr<GoogleAPIClient> apiclient(new GoogleAPIClient(2.0, DeviceType::MODE_1));
+	
+	try {		
+		spectrumManager.SetASpectrumApiClient(std::move(apiclient));
 		
-		// cache is clean so need to download all the data
-		spectrumManager.GetChannels(0, 0, 30);
-		spectrumManager.GetChannels(50, 0, 30);
-		spectrumManager.GetChannels(0, 50, 30);
-		spectrumManager.GetChannels(0, 100, 30);
-		spectrumManager.GetChannels(100, 0, 30);
+		// It will crash because the instance "apiclient" was moved inside the spectrumManager
+		// printf("%s", apiclient->GetCurrentConfiguration().c_str());
 		
-		// cache is clean so need to download all the data
-		spectrumManager.GetChannels(0, 0, 30);
-		spectrumManager.GetChannels(50, 0, 30);
-		spectrumManager.GetChannels(0, 50, 30);
-		spectrumManager.GetChannels(0, 100, 30);
-		spectrumManager.GetChannels(100, 0, 30);
+		// the cache is empty so need to download all the data
+		spectrumManager.GetChannels(0, 0);
+		spectrumManager.GetChannels(50, 0);
+		spectrumManager.GetChannels(0, 50);
+		spectrumManager.GetChannels(0, 100);
+		spectrumManager.GetChannels(100, 0);
+		
+		// the cache already has the following items
+		spectrumManager.GetChannels(0, 0);
+		spectrumManager.GetChannels(50, 0);
+		spectrumManager.GetChannels(0, 50);
+		spectrumManager.GetChannels(0, 100);
+		spectrumManager.GetChannels(100, 0);
 		
 	} catch (CURLErrorException &e) {
 		printf("%s\n\n", e.what());
@@ -65,8 +72,9 @@ int main(int argc, char** argv) {
 		printf("%s\n\n", e.what());
 	} catch (std::out_of_range &e) {
 		printf("%s\n\n", e.what());
+	} catch (std::runtime_error &e){
+		printf("%s\n\n", e.what());
 	}
-
 
 	return 0;
 }

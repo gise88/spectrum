@@ -16,34 +16,24 @@
  */
 
 /* 
- * File:   SpectrumConstants.h
+ * File:   IConfiguration.h
  * Author: Gianluca Iselli <gianluca.iselli@gmail.com>
  *
- * Created on May 11, 2016, 5:49 PM
+ * Created on May 21, 2016, 6:16 PM
  */
 
-#ifndef SPECTRUMCONSTANTS_H
-#define SPECTRUMCONSTANTS_H
+#ifndef ICONFIGURATION_H
+#define ICONFIGURATION_H
+
+#include <string>
+
+class IConfiguration {
+public:
+	virtual ~IConfiguration() = default;
+	
+	virtual std::string GetCurrentConfiguration() = 0; // pure virtual
+};
 
 
-#define GOOGLE_SPECTRUM_API_KEY_FILE	"GoogleSpectrumApiKey.txt"
-#define GOOGLE_SPECTRUM_API_URL			"https://www.googleapis.com/rpc"
-
-#define DEVICE_TYPE_FIXED				"FIXED"
-#define DEVICE_TYPE_MODE_1				"MODE_1"
-#define DEVICE_TYPE_MODE_2				"MODE_2"
-#define FIRST_CHANNEL_AVAILABLE			21
-#define FIRST_CHANNEL_AVAILABLE_HZ		512000000
-
-#define DEFAULT_ANTENNA_HEIGHT		2.0
-#define DEFAULT_DEVICE_TYPE			DEVICE_TYPE_MODE_1
-
-
-#define AREA_WIDTH_SIZE		200 //meters
-#define AREA_HEIGHT_SIZE	150 //meters
-#define CELL_SIDE_SIZE		50 //meters
-
-
-
-#endif /* SPECTRUMCONSTANTS_H */
+#endif /* ICONFIGURATION_H */
 

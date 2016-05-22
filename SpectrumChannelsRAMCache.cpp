@@ -18,78 +18,89 @@
 #include <math.h>
 #include <string.h>
 #include "Utilities.h"
-#include "SpectrumChannelsCache.h"
+#include "SpectrumChannelsRAMCache.h"
 
 
 
 
 /*
-	FrequencyRangesCache
+	SpectrumChannelsRAMCache
  */
 
-SpectrumChannelsCache::SpectrumChannelsCache(uint cell_width_count, uint cell_height_count)
+SpectrumChannelsRAMCache::SpectrumChannelsRAMCache(uint cell_width_count, uint cell_height_count)
 : m_CellWidthCount(cell_width_count), m_CellHeightCount(cell_height_count) {
-	LogD(0, "SpectrumChannelsCache(%d, %d)\n", cell_width_count, cell_height_count);
+	LogD(0, "SpectrumChannelsRAMCache(%d, %d)\n", cell_width_count, cell_height_count);
 	
-	m_Entries.reserve(m_CellWidthCount);
+	m_GridEntries.reserve(m_CellWidthCount);
 	for (uint x = 0; x < m_CellWidthCount; x++) {
 		std::vector<Entry *> tmp;
 		tmp.reserve(m_CellHeightCount);
 		for (uint y = 0; y < m_CellHeightCount; y++)
 			tmp.push_back(new Entry());
-		m_Entries.push_back(tmp);
+		m_GridEntries.push_back(tmp);
 	}
 	
 	LogL(5, "Cache grid dimension: %ldx%ld\n", m_CellWidthCount, m_CellHeightCount);
 }
 
-SpectrumChannelsCache::~SpectrumChannelsCache() {
-	LogD(0, "~SpectrumChannelsCache()\n");
-	for (auto x_item : m_Entries)
-		for (auto y_item : x_item)
-			delete y_item;
+SpectrumChannelsRAMCache::~SpectrumChannelsRAMCache() {
+	LogD(0, "~SpectrumChannelsRAMCache()\n");
+	for (std::vector<Entry *> entries : m_GridEntries)
+		for (Entry * entry : entries)
+			delete entry;
 }
 
-void SpectrumChannelsCache::push(uint x, uint y, SpectrumChannel *item) {
+void SpectrumChannelsRAMCache::ClearCache() {
+	for (std::vector<Entry *> entries : m_GridEntries)
+		for (Entry * entry : entries)
+			entry->Clear();
+}
+
+void SpectrumChannelsRAMCache::Push(uint x, uint y, SpectrumChannel *item) {
 	LogD(0, "push(%d, %d, {%s})\n", x, y, item->toString());
 	if (x >= m_CellWidthCount)
 		throw MakeException(std::out_of_range, "x (" + std::to_string(x) + ") out of range: ");
 	if (y >= m_CellHeightCount)
 		throw MakeException(std::out_of_range, "y (" + std::to_string(y) + ") out of range: ");
-	m_Entries[x][y]->push(item);
+	m_GridEntries[x][y]->Push(item);
 }
 
-void SpectrumChannelsCache::push(uint x, uint y, std::vector<SpectrumChannel>& vec) {
+void SpectrumChannelsRAMCache::Push(uint x, uint y, std::vector<SpectrumChannel>& vec) {
 	LogD(0, "push(%d, %d, list)\n", x, y);
 	
 	for (SpectrumChannel item : vec)
-		this->push(x, y, &item);
+		this->Push(x, y, &item);
 }
 
-const std::vector<SpectrumChannel> SpectrumChannelsCache::get(uint x, uint y) {
+const std::vector<SpectrumChannel> SpectrumChannelsRAMCache::Get(uint x, uint y) {
 	LogD(0, "get(%d, %d)\n", x, y);
 	
-	return m_Entries[x][y]->get();
+	return m_GridEntries[x][y]->Get();
 }
 
 /*
-	SpectrumChannelsCache::Entry
+	SpectrumChannelsRAMCache::Entry
  */
 
-SpectrumChannelsCache::Entry::Entry() {
+SpectrumChannelsRAMCache::Entry::Entry() {
 	LogD(0, "Entry()\n");
 }
 
-SpectrumChannelsCache::Entry::~Entry() {
+SpectrumChannelsRAMCache::Entry::~Entry() {
 	LogD(0, "~Entry()\n");
 }
 
-void SpectrumChannelsCache::Entry::push(SpectrumChannel *item) {
+void SpectrumChannelsRAMCache::Entry::Clear() {
+	LogD(0, "Entry::Clear()\n");
+	m_Channels.clear();
+}
+
+void SpectrumChannelsRAMCache::Entry::Push(SpectrumChannel *item) {
 	LogD(0, "Entry::push({%s})\n", item->toString());
 	m_Channels.push_back(*item);
 }
 
-const std::vector<SpectrumChannel> SpectrumChannelsCache::Entry::get() {
+const std::vector<SpectrumChannel> SpectrumChannelsRAMCache::Entry::Get() {
 	LogD(0, "Entry::get()\n");
 	return m_Channels;
 }

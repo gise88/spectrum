@@ -17,11 +17,15 @@
 
 
 
-#ifndef SPECTRUMCHANNELSCACHE_H
-#define SPECTRUMCHANNELSCACHE_H
+#ifndef SPECTRUMCHANNELSRAMCACHE_H
+#define SPECTRUMCHANNELSRAMCACHE_H
 
 #include <list>
 #include <vector>
+
+#include "IConfiguration.h"
+
+
 
 struct SpectrumChannel {
 	uint number;
@@ -43,15 +47,17 @@ struct SpectrumChannel {
 };
 
 
-class SpectrumChannelsCache {
+class SpectrumChannelsRAMCache {
 public:
 	
-	SpectrumChannelsCache(uint cell_width_count, uint cell_height_count);
-	virtual ~SpectrumChannelsCache();
+	SpectrumChannelsRAMCache(uint cell_width_count, uint cell_height_count);
+	virtual ~SpectrumChannelsRAMCache();
 	
-	void push(uint x, uint y, SpectrumChannel *item);
-	void push(uint x, uint y, std::vector<SpectrumChannel>& vec);
-	const std::vector<SpectrumChannel> get(uint x, uint y);
+	void ClearCache();
+	
+	void Push(uint x, uint y, SpectrumChannel *item);
+	void Push(uint x, uint y, std::vector<SpectrumChannel>& vec);
+	const std::vector<SpectrumChannel> Get(uint x, uint y);
 	
 private:
 	
@@ -60,19 +66,20 @@ private:
 		Entry();
 		virtual ~Entry();
 		
-		void push(SpectrumChannel *item);
-		const std::vector<SpectrumChannel> get();
+		void Clear();
+		void Push(SpectrumChannel *item);
+		const std::vector<SpectrumChannel> Get();
 		
 	private:
 		std::vector<SpectrumChannel> m_Channels;
     };
 	
-	std::vector< std::vector<Entry *> > m_Entries;
+	std::vector< std::vector<Entry *> > m_GridEntries;
 	
 	uint m_CellWidthCount;
 	uint m_CellHeightCount;
 };
 
 
-#endif /* SPECTRUMCHANNELSCACHE_H */
+#endif /* SPECTRUMCHANNELSRAMCACHE_H */
 

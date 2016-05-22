@@ -25,20 +25,29 @@
 
 
 SpectrumManager::SpectrumManager(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size, bool use_cache)
-: m_UseCache(use_cache), m_ProjectionMapper(SW_lat, SW_lon, area_width, area_height, cell_side_size), m_ChannelsCache(nullptr) {
+: m_UseCache(use_cache), m_ProjectionMapper(SW_lat, SW_lon, area_width, area_height, cell_side_size), m_ChannelsRAMCache(nullptr) {
 	LogD(0, "SpectrumManager(%lf, %lf, %.2lf, %.2lf, %.2lf, %s)\n", SW_lat, SW_lon, area_width, area_height, cell_side_size, use_cache ? "true" : "false");
 	if (m_UseCache)
-		m_ChannelsCache = SpectrumChannelsCacheFactory::CreateSpectrumChannelsCache(SW_lat, SW_lon, area_width, area_height, cell_side_size);
+		m_ChannelsRAMCache = SpectrumChannelsCacheFactory::CreateSpectrumChannelsRAMCache(SW_lat, SW_lon, area_width, area_height, cell_side_size);
 }
 
 SpectrumManager::~SpectrumManager() {
 	LogD(0, "~SpectrumManager()\n");
 	
-	delete m_ChannelsCache;
+	if (m_UseCache)
+		delete m_ChannelsRAMCache;
 }
 
-const std::vector<SpectrumChannel> SpectrumManager::GetChannels(uint pos_x, uint pos_y, double antenna_height) {
-	LogD(0, "GetChannels(%d, %d, %lf)\n", pos_x, pos_y, antenna_height);
+void SpectrumManager::SetASpectrumApiClient(std::unique_ptr<ASpectrumApiClient>&& api_client) {
+	LogD(0, "SetASpectrumApiClient(*api_client*)\n");
+	m_ApiClient = std::move(api_client);
+	
+	if (m_UseCache)
+		m_ChannelsRAMCache->ClearCache();
+}
+
+const std::vector<SpectrumChannel> SpectrumManager::GetChannels(uint pos_x, uint pos_y) {
+	LogD(0, "GetChannels(%d, %d)\n", pos_x, pos_y);
 	
 	uint x, y;
 	double lat, lng;
@@ -46,58 +55,25 @@ const std::vector<SpectrumChannel> SpectrumManager::GetChannels(uint pos_x, uint
 	
 	if (m_UseCache) {
 		m_ProjectionMapper.LocalPosXY2IndexXY(pos_x, pos_y, x, y);
-		cache = m_ChannelsCache->get(x, y);
+		cache = m_ChannelsRAMCache->Get(x, y);
 		if (cache.size() > 0) {
 			LogD(2, "m_ChannelsCache->get(x: %d, y: %d)\n", x, y);
 			return cache;
 		}
 	}
 	
-	
 	// convert the JSON result into the vector of SpectrumChannel, 
 	// push the new informations into the cache and return these values
-	
 	m_ProjectionMapper.LocalPosXY2LatLng(pos_x, pos_y, lat, lng);
 	LogL(5, "GoogleAPIClient::PostAPI(lat: %lf, lng: %lf)\n", lat, lng);
-	JSON res = GoogleAPIClient::PostAPI(lat, lng, antenna_height);
-	cache = JSONSpectrum2SpectrumChannels(res);
+	
+	if (m_ApiClient == nullptr)
+		throw MakeException(std::runtime_error, std::string("You have to set a concrete instance of ASpectrumApiClient before calling ") + __func__ + "() function");
+	
+	cache = m_ApiClient->GetSpectrumChannels(lat, lng);
 	
 	if (m_UseCache)
-		m_ChannelsCache->push(x, y, cache);
+		m_ChannelsRAMCache->Push(x, y, cache);
 	
 	return cache;
-}
-
-std::vector<SpectrumChannel> SpectrumManager::JSONSpectrum2SpectrumChannels(JSON& res) {
-	std::vector<SpectrumChannel> channels;
-	
-	if (!res["error"].empty())
-		throw MakeException(JsonWithErrorException,  "Error code: " +std::to_string(res["error"]["code"].get<int>()) + "   Error message:" + res["error"]["message"].get<std::string>());
-		
-	JSON spectra0 = res["result"]["spectrumSchedules"][0]["spectra"][0];	
-	double bandwidth = spectra0["bandwidth"].get<double>();	
-	LogD(1, "bandwidth: %.2lf\n", bandwidth);	
-	
-	uint channel_nr=FIRST_CHANNEL_AVAILABLE;
-	LogD(1, "frequencyRanges:\n");
-	for (auto freq_range : spectra0["frequencyRanges"]) {
-		uint startHz = freq_range["startHz"].get<uint>();
-		uint stopHz = freq_range["stopHz"].get<uint>();
-		double maxPowerDBm = freq_range["maxPowerDBm"].get<double>();
-		
-		if (startHz < FIRST_CHANNEL_AVAILABLE_HZ)
-			startHz = FIRST_CHANNEL_AVAILABLE_HZ;
-		
-		LogD(1, "startHz: %d  stopHz: %d  maxPowerDBm: %.12lf\n", startHz, stopHz, maxPowerDBm);
-		
-		for (; startHz < stopHz; startHz += bandwidth) {
-			LogD(1, "ch#%d  -  startHz: %d  stopHz: %d  maxPowerDBm: %.12lf\n",channel_nr, startHz, (uint)(startHz+bandwidth), maxPowerDBm);
-			channels.push_back(SpectrumChannel(channel_nr, maxPowerDBm));
-			channel_nr++;
-		}
-		
-	}
-	LogD(2, "# channels: %d\n", channel_nr);
-	
-	return channels;
 }

@@ -21,9 +21,9 @@
 #include "SpectrumChannelsCacheFactory.h"
 
 
-SpectrumChannelsCache* SpectrumChannelsCacheFactory::CreateSpectrumChannelsCache(
+SpectrumChannelsRAMCache* SpectrumChannelsCacheFactory::CreateSpectrumChannelsRAMCache(
 	double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size) {
-	LogD(0, "CreateSpectrumChannelsCache(%lf, %lf, %.2lf, %.2lf, %.2lf)\n", SW_lat, SW_lon, area_width, area_height, cell_side_size);
+	LogD(0, "CreateSpectrumChannelsRAMCache(%lf, %lf, %.2lf, %.2lf, %.2lf)\n", SW_lat, SW_lon, area_width, area_height, cell_side_size);
 	
 	if (cell_side_size == 0.0)
 		DieWithError(1, "cell length side cannot be zero!");
@@ -36,6 +36,6 @@ SpectrumChannelsCache* SpectrumChannelsCacheFactory::CreateSpectrumChannelsCache
 		DieWithError(1, "area_height %% cell_side_length != 0.0");
 	uint cell_height_count = (uint) area_height/cell_side_size;
 	
-	return new SpectrumChannelsCache(cell_width_count, cell_height_count);
+	return new SpectrumChannelsRAMCache(cell_width_count, cell_height_count);
 }
 

@@ -26,6 +26,8 @@
 
 
 static std::string readGoogleSpectrumApiKeyFromFile() {
+	LogD(0, "readGoogleSpectrumApiKeyFromFile()\n");
+	
 	std::ifstream infile(GOOGLE_SPECTRUM_API_KEY_FILE);
 	std::string apiKey;
 
@@ -43,8 +45,39 @@ unsigned int GoogleAPIClient::m_RequestCount = 0;
 std::string GoogleAPIClient::m_GoogleSpectrumAPIKey = readGoogleSpectrumApiKeyFromFile();
 
 
+GoogleAPIClient::GoogleAPIClient() {
+	LogD(0, "GoogleAPIClient()\n");
+	m_AntennaHeight = DEFAULT_ANTENNA_HEIGHT;
+	m_DeviceType = DEFAULT_DEVICE_TYPE;
+}
 
-JSON GoogleAPIClient::PostAPI(double latitude, double longitude, double antenna_height) {
+GoogleAPIClient::GoogleAPIClient(double meters, DeviceType type) {
+	LogD(0, "GoogleAPIClient(%lf, %s)\n", meters, type._to_string());
+	
+	m_AntennaHeight = meters;
+	switch (type) {
+		case DeviceType::FIXED:
+			m_DeviceType = DEVICE_TYPE_FIXED;
+			break;
+		case DeviceType::MODE_1:
+			m_DeviceType = DEVICE_TYPE_MODE_1;
+			break;
+		case DeviceType::MODE_2:
+			m_DeviceType = DEVICE_TYPE_MODE_2;
+			break;
+	}
+}
+
+GoogleAPIClient::~GoogleAPIClient() {
+	LogD(0, "~GoogleAPIClient()\n");
+}
+
+std::string GoogleAPIClient::GetCurrentConfiguration() {
+	return m_DeviceType + "_" + std::to_string(m_AntennaHeight);
+}
+
+std::vector<SpectrumChannel> GoogleAPIClient::GetSpectrumChannels(double latitude, double longitude) {
+	LogD(0, "GetSpectrumChannels(%lf, %lf)\n", latitude, longitude);
 	
 	// from: https://developers.google.com/spectrum/paws/gettingstarted#try-out-google-spectrum-database
 	Request req(GOOGLE_SPECTRUM_API_URL);
@@ -76,7 +109,7 @@ JSON GoogleAPIClient::PostAPI(double latitude, double longitude, double antenna_
 							}}}},
 				{"antenna",
 					{
-						{"height", antenna_height},
+						{"height", m_AntennaHeight},
 						{"heightType", "AGL"}
 					}},
 				{"capabilities",
@@ -92,7 +125,7 @@ JSON GoogleAPIClient::PostAPI(double latitude, double longitude, double antenna_
 //									{"stopHz", 950000000}
 //								}
 //							}
-								JSON::object()
+							JSON::object()
 						}
 					}},
 				{"key", GoogleAPIClient::m_GoogleSpectrumAPIKey}
@@ -100,5 +133,41 @@ JSON GoogleAPIClient::PostAPI(double latitude, double longitude, double antenna_
 		{"id", std::string("SpectrumRequestNumber-").append(std::to_string(GoogleAPIClient::m_RequestCount++))}
 	};
 
-	return req.PostJSON(data);
+	return JSONSpectrum2SpectrumChannels(req.PostJSON(data));
+}
+
+std::vector<SpectrumChannel> GoogleAPIClient::JSONSpectrum2SpectrumChannels(JSON&& res) {
+	LogD(0, "JSONSpectrum2SpectrumChannels(JSON&& res)\n");
+	
+	std::vector<SpectrumChannel> channels;
+	
+	if (!res["error"].empty())
+		throw MakeException(JsonWithErrorException,  "Error code: " +std::to_string(res["error"]["code"].get<int>()) + "   Error message:" + res["error"]["message"].get<std::string>());
+		
+	JSON spectra0 = res["result"]["spectrumSchedules"][0]["spectra"][0];	
+	double bandwidth = spectra0["bandwidth"].get<double>();	
+	LogD(1, "bandwidth: %.2lf\n", bandwidth);	
+	
+	uint channel_nr=FIRST_CHANNEL_AVAILABLE;
+	LogD(1, "frequencyRanges:\n");
+	for (auto freq_range : spectra0["frequencyRanges"]) {
+		uint startHz = freq_range["startHz"].get<uint>();
+		uint stopHz = freq_range["stopHz"].get<uint>();
+		double maxPowerDBm = freq_range["maxPowerDBm"].get<double>();
+		
+		if (startHz < FIRST_CHANNEL_AVAILABLE_HZ)
+			startHz = FIRST_CHANNEL_AVAILABLE_HZ;
+		
+		LogD(1, "startHz: %d  stopHz: %d  maxPowerDBm: %.12lf\n", startHz, stopHz, maxPowerDBm);
+		
+		for (; startHz < stopHz; startHz += bandwidth) {
+			LogD(1, "ch#%d  -  startHz: %d  stopHz: %d  maxPowerDBm: %.12lf\n",channel_nr, startHz, (uint)(startHz+bandwidth), maxPowerDBm);
+			channels.push_back(SpectrumChannel(channel_nr, maxPowerDBm));
+			channel_nr++;
+		}
+		
+	}
+	LogD(2, "# channels: %d\n", channel_nr);
+	
+	return channels;
 }

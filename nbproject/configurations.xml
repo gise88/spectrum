@@ -4,19 +4,22 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>ASpectrumApiClient.h</itemPath>
       <itemPath>CurlGlobal.h</itemPath>
       <itemPath>Exceptions.h</itemPath>
       <itemPath>GoogleAPIClient.h</itemPath>
+      <itemPath>IConfiguration.h</itemPath>
       <itemPath>Log.h</itemPath>
       <itemPath>ProjectionMapper.h</itemPath>
       <itemPath>Request.h</itemPath>
       <itemPath>Singleton.h</itemPath>
-      <itemPath>SpectrumChannelsCache.h</itemPath>
       <itemPath>SpectrumChannelsCacheFactory.h</itemPath>
+      <itemPath>SpectrumChannelsRAMCache.h</itemPath>
       <itemPath>SpectrumConstants.h</itemPath>
       <itemPath>SpectrumManager.h</itemPath>
       <itemPath>Utilities.h</itemPath>
       <itemPath>definitions.h</itemPath>
+      <itemPath>enum.h</itemPath>
       <itemPath>json.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -30,8 +33,8 @@
       <itemPath>Log.cpp</itemPath>
       <itemPath>ProjectionMapper.cpp</itemPath>
       <itemPath>Request.cpp</itemPath>
-      <itemPath>SpectrumChannelsCache.cpp</itemPath>
       <itemPath>SpectrumChannelsCacheFactory.cpp</itemPath>
+      <itemPath>SpectrumChannelsRAMCache.cpp</itemPath>
       <itemPath>SpectrumManager.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -74,6 +77,8 @@
           <commandLine>-lm -lcurl -lproj -fsanitize=address</commandLine>
         </linkerTool>
       </compileType>
+      <item path="ASpectrumApiClient.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="CurlGlobal.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Exceptions.h" ex="false" tool="3" flavor2="0">
@@ -81,6 +86,8 @@
       <item path="GoogleAPIClient.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="GoogleAPIClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IConfiguration.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Log.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -96,13 +103,13 @@
       </item>
       <item path="Singleton.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="SpectrumChannelsCache.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SpectrumChannelsCache.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="SpectrumChannelsCacheFactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SpectrumChannelsCacheFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SpectrumChannelsRAMCache.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SpectrumChannelsRAMCache.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SpectrumConstants.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -115,6 +122,8 @@
       <item path="Utilities.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="definitions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="enum.h" ex="false" tool="3" flavor2="0">
       </item>
       <folder path="TestFiles/f1">
         <cTool>
@@ -178,6 +187,8 @@
           <commandLine>-lm -lcurl -lproj</commandLine>
         </linkerTool>
       </compileType>
+      <item path="ASpectrumApiClient.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="CurlGlobal.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Exceptions.h" ex="false" tool="3" flavor2="0">
@@ -185,6 +196,8 @@
       <item path="GoogleAPIClient.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="GoogleAPIClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IConfiguration.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Log.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -200,13 +213,13 @@
       </item>
       <item path="Singleton.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="SpectrumChannelsCache.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SpectrumChannelsCache.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="SpectrumChannelsCacheFactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SpectrumChannelsCacheFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SpectrumChannelsRAMCache.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SpectrumChannelsRAMCache.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SpectrumConstants.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -219,6 +232,8 @@
       <item path="Utilities.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="definitions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="enum.h" ex="false" tool="3" flavor2="0">
       </item>
       <folder path="TestFiles/f1">
         <cTool>

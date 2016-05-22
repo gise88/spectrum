@@ -16,38 +16,22 @@
  */
 
 
+#ifndef ASPECTRUMAPICLIENT_H
+#define ASPECTRUMAPICLIENT_H
 
-#ifndef SPECTRUMMANAGER_H
-#define SPECTRUMMANAGER_H
-
-#include <list>
-#include <vector>
-#include <memory>
-
-#include "Singleton.h"
+#include "IConfiguration.h"
 #include "SpectrumChannelsRAMCache.h"
-#include "ProjectionMapper.h"
-#include "ASpectrumApiClient.h"
 
 
 
-
-class SpectrumManager : public Singleton<SpectrumManager> {
+class ASpectrumApiClient : public IConfiguration {
 public:
-	SpectrumManager(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size, bool use_cache=true);
-	virtual ~SpectrumManager();
+	virtual ~ASpectrumApiClient() = default;
 	
-	void SetASpectrumApiClient(std::unique_ptr<ASpectrumApiClient>&& api_client);
-	const std::vector<SpectrumChannel> GetChannels(uint pos_x, uint pos_y);
+	virtual std::vector<SpectrumChannel> GetSpectrumChannels(double latitude, double longitude) = 0; // pure virtual
 	
-private:
-	
-	bool m_UseCache;
-	ProjectionMapper m_ProjectionMapper;
-	SpectrumChannelsRAMCache *m_ChannelsRAMCache;
-	std::unique_ptr<ASpectrumApiClient> m_ApiClient;
-	
+	// GetCurrentConfiguration() from IConfiguration, need to be implements in the concrete class
 };
 
-#endif /* SPECTRUMMANAGER_H */
+#endif /* ASPECTRUMAPICLIENT_H */
 
