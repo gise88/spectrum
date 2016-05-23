@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>ACacheManager.h</itemPath>
       <itemPath>ASpectrumApiClient.h</itemPath>
       <itemPath>CurlGlobal.h</itemPath>
       <itemPath>Exceptions.h</itemPath>
@@ -13,7 +14,6 @@
       <itemPath>ProjectionMapper.h</itemPath>
       <itemPath>Request.h</itemPath>
       <itemPath>Singleton.h</itemPath>
-      <itemPath>SpectrumChannelsCacheFactory.h</itemPath>
       <itemPath>SpectrumChannelsRAMCache.h</itemPath>
       <itemPath>SpectrumConstants.h</itemPath>
       <itemPath>SpectrumManager.h</itemPath>
@@ -29,11 +29,11 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>ACacheManager.cpp</itemPath>
       <itemPath>GoogleAPIClient.cpp</itemPath>
       <itemPath>Log.cpp</itemPath>
       <itemPath>ProjectionMapper.cpp</itemPath>
       <itemPath>Request.cpp</itemPath>
-      <itemPath>SpectrumChannelsCacheFactory.cpp</itemPath>
       <itemPath>SpectrumChannelsRAMCache.cpp</itemPath>
       <itemPath>SpectrumManager.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
@@ -77,6 +77,10 @@
           <commandLine>-lm -lcurl -lproj -fsanitize=address</commandLine>
         </linkerTool>
       </compileType>
+      <item path="ACacheManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ACacheManager.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="ASpectrumApiClient.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="CurlGlobal.h" ex="false" tool="3" flavor2="0">
@@ -102,10 +106,6 @@
       <item path="Request.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Singleton.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="SpectrumChannelsCacheFactory.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SpectrumChannelsCacheFactory.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SpectrumChannelsRAMCache.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -187,6 +187,10 @@
           <commandLine>-lm -lcurl -lproj</commandLine>
         </linkerTool>
       </compileType>
+      <item path="ACacheManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ACacheManager.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="ASpectrumApiClient.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="CurlGlobal.h" ex="false" tool="3" flavor2="0">
@@ -212,10 +216,6 @@
       <item path="Request.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Singleton.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="SpectrumChannelsCacheFactory.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SpectrumChannelsCacheFactory.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SpectrumChannelsRAMCache.cpp" ex="false" tool="1" flavor2="0">
       </item>

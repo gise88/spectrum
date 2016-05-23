@@ -35,11 +35,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/ACacheManager.o \
 	${OBJECTDIR}/GoogleAPIClient.o \
 	${OBJECTDIR}/Log.o \
 	${OBJECTDIR}/ProjectionMapper.o \
 	${OBJECTDIR}/Request.o \
-	${OBJECTDIR}/SpectrumChannelsCacheFactory.o \
 	${OBJECTDIR}/SpectrumChannelsRAMCache.o \
 	${OBJECTDIR}/SpectrumManager.o \
 	${OBJECTDIR}/main.o
@@ -79,6 +79,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrum: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spectrum ${OBJECTFILES} ${LDLIBSOPTIONS} -lm -lcurl -lproj -fsanitize=address
 
+${OBJECTDIR}/ACacheManager.o: ACacheManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ACacheManager.o ACacheManager.cpp
+
 ${OBJECTDIR}/GoogleAPIClient.o: GoogleAPIClient.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -98,11 +103,6 @@ ${OBJECTDIR}/Request.o: Request.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Request.o Request.cpp
-
-${OBJECTDIR}/SpectrumChannelsCacheFactory.o: SpectrumChannelsCacheFactory.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumChannelsCacheFactory.o SpectrumChannelsCacheFactory.cpp
 
 ${OBJECTDIR}/SpectrumChannelsRAMCache.o: SpectrumChannelsRAMCache.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -137,6 +137,19 @@ ${TESTDIR}/Test.o: Test.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Werror -DDEBUG -I. -I../googletest/googletest-1.7 -I../googletest/googletest-1.7/include -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/Test.o Test.cpp
 
+
+${OBJECTDIR}/ACacheManager_nomain.o: ${OBJECTDIR}/ACacheManager.o ACacheManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/ACacheManager.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ACacheManager_nomain.o ACacheManager.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/ACacheManager.o ${OBJECTDIR}/ACacheManager_nomain.o;\
+	fi
 
 ${OBJECTDIR}/GoogleAPIClient_nomain.o: ${OBJECTDIR}/GoogleAPIClient.o GoogleAPIClient.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -188,19 +201,6 @@ ${OBJECTDIR}/Request_nomain.o: ${OBJECTDIR}/Request.o Request.cpp
 	    $(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Request_nomain.o Request.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Request.o ${OBJECTDIR}/Request_nomain.o;\
-	fi
-
-${OBJECTDIR}/SpectrumChannelsCacheFactory_nomain.o: ${OBJECTDIR}/SpectrumChannelsCacheFactory.o SpectrumChannelsCacheFactory.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/SpectrumChannelsCacheFactory.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumChannelsCacheFactory_nomain.o SpectrumChannelsCacheFactory.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/SpectrumChannelsCacheFactory.o ${OBJECTDIR}/SpectrumChannelsCacheFactory_nomain.o;\
 	fi
 
 ${OBJECTDIR}/SpectrumChannelsRAMCache_nomain.o: ${OBJECTDIR}/SpectrumChannelsRAMCache.o SpectrumChannelsRAMCache.cpp 

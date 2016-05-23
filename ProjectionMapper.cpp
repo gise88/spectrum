@@ -29,8 +29,8 @@ ProjectionMapper::ProjectionMapper(double SW_lat, double SW_lon, double area_wid
 		DieWithError(1, "Failed to initiate latlong proj\n");
 
 	// Translate the Origin coordinates into Northings and Eastings 
-	m_OriginNorthing = SW_lat * DEG_TO_RAD;
-	m_OriginEastings = SW_lon * DEG_TO_RAD;
+	m_OriginNorthing = m_SWLat * DEG_TO_RAD;
+	m_OriginEastings = m_SWLon * DEG_TO_RAD;
 
 	if ((err = pj_transform(m_PJLatlng, m_PJMerc, 1, 1, &m_OriginEastings, &m_OriginNorthing, NULL)) != 0)
 		DieWithError(1, "Failed to transform (SW_lat, SW_lon) - Error code: %d   Error message: %s\n", err, pj_strerrno(err));
@@ -54,28 +54,66 @@ ProjectionMapper::~ProjectionMapper() {
 	pj_free(m_PJLatlng);
 }
 
-void ProjectionMapper::LocalPosXY2LatLng(uint pos_x, uint pos_y, double& lat, double& lng) {
-	LogD(0, "LocalPosXPosY2LatLng(%d, %d, *lat*, *lng*)\n", pos_x, pos_y);
-	
-	if (pos_x > m_AreaWidth)
-		throw MakeException(std::out_of_range, "pos_x("+std::to_string(pos_x)+") > m_AreaWidth");
-	if (pos_y > m_AreaHeight)
-		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") > m_AreaHeight");
-	
-	lat = m_SWLat + ((m_NWLat - m_SWLat) / m_AreaWidth) * pos_x;
-	lng = m_SWLon + ((m_NWLon - m_SWLon) / m_AreaHeight) * pos_y;
-	
-	LogD(1, "LocalPosXY2LatLng - lat: %lf    lng: %lf\n", lat, lng);
-}
 
 void ProjectionMapper::LocalPosXY2IndexXY(uint pos_x, uint pos_y, uint& idx_x, uint& idx_y) {
 	LogD(0, "LocalPosXY2IndexXY(%d, %d, *idx_x*, *idx_y*)\n", pos_x, pos_y);
 	
-	if (pos_x > m_AreaWidth)
-		throw MakeException(std::out_of_range, "pos_x("+std::to_string(pos_x)+") > m_AreaWidth");
-	if (pos_y > m_AreaHeight)
-		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") > m_AreaHeight");
+	if (pos_x >= m_AreaWidth)
+		throw MakeException(std::out_of_range, "pos_x("+std::to_string(pos_x)+") >= m_AreaWidth");
+	if (pos_y >= m_AreaHeight)
+		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") >= m_AreaHeight");
 	
 	idx_x = (uint)floor((double)pos_x / m_CellSideSize);
 	idx_y = (uint)floor((double)pos_y / m_CellSideSize);
+}
+
+void ProjectionMapper::LocalPosXY2LatLng(uint pos_x, uint pos_y, double& lat, double& lng) {
+	LogD(0, "LocalPosXPosY2LatLng(%d, %d, *lat*, *lng*)\n", pos_x, pos_y);
+	
+	int err;
+	
+	if (pos_x >= m_AreaWidth)
+		throw MakeException(std::out_of_range, "pos_x("+std::to_string(pos_x)+") >= m_AreaWidth");
+	if (pos_y >= m_AreaHeight)
+		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") >= m_AreaHeight");
+	
+	double x = pos_x + m_OriginEastings;
+    double y = pos_y + m_OriginNorthing;
+		
+	if ((err = pj_transform(m_PJMerc, m_PJLatlng, 1, 1, &x, &y, NULL)) != 0)
+		DieWithError(1, "Failed to transform (x,y) - Error code: %d   Error message: %s\n", err, pj_strerrno(err));
+	
+	lat = y * RAD_TO_DEG;
+	lng = x * RAD_TO_DEG;
+	
+	LogD(1, "LocalPosXY2LatLng - lat: %lf    lng: %lf\n", lat, lng);
+}
+
+void ProjectionMapper::LatLng2IndexXY(double lat, double lng, uint& idx_x, uint& idx_y) {
+	LogD(0, "LatLng2IndexXY(%lf, %lf, *idx_x*, *idx_y*)\n", lat, lng);
+	
+	int err;
+	double pos_x, pos_y;
+	
+	double east = lng * DEG_TO_RAD;
+	double north = lat * DEG_TO_RAD;
+	
+	if ((err = pj_transform(m_PJLatlng, m_PJMerc, 1, 1, &east, &north, NULL)) != 0)
+		DieWithError(1, "Failed to transform (SW_lat, SW_lon) - Error code: %d   Error message: %s\n", err, pj_strerrno(err));
+	
+	pos_x = north - m_OriginNorthing;
+	pos_y = east - m_OriginEastings;
+	
+	if (pos_x >= m_AreaWidth)
+		throw MakeException(std::out_of_range, "pos_x("+std::to_string(pos_x)+") >= m_AreaWidth");
+	if (pos_x < 0)
+		throw MakeException(std::out_of_range, "pos_x("+std::to_string(pos_x)+") < 0");
+	if (pos_y >= m_AreaHeight)
+		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") > m_AreaHeight");
+	if (pos_y < 0)
+		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") < 0");
+	
+	
+	
+	LogD(1, "LatLng2IndexXY - idx_x: %d    idx_y: %d\n", idx_x, idx_y);
 }

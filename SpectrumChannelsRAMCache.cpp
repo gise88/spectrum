@@ -74,7 +74,10 @@ void SpectrumChannelsRAMCache::Push(uint x, uint y, std::vector<SpectrumChannel>
 
 const std::vector<SpectrumChannel> SpectrumChannelsRAMCache::Get(uint x, uint y) {
 	LogD(0, "get(%d, %d)\n", x, y);
-	
+	if (x >= m_CellWidthCount)
+		throw MakeException(std::out_of_range, "x (" + std::to_string(x) + ") out of range: ");
+	if (y >= m_CellHeightCount)
+		throw MakeException(std::out_of_range, "y (" + std::to_string(y) + ") out of range: ");
 	return m_GridEntries[x][y]->Get();
 }
 

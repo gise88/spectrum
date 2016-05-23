@@ -19,12 +19,12 @@
 #ifndef ASPECTRUMAPICLIENT_H
 #define ASPECTRUMAPICLIENT_H
 
-#include "IConfiguration.h"
+#include "ACacheManager.h"
 #include "SpectrumChannelsRAMCache.h"
 
 
 
-class ASpectrumApiClient : public IConfiguration {
+class ASpectrumApiClient : public ACacheManager {
 public:
 	virtual ~ASpectrumApiClient() = default;
 	

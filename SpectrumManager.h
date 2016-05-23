@@ -23,9 +23,9 @@
 #include <list>
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 #include "Singleton.h"
-#include "SpectrumChannelsRAMCache.h"
 #include "ProjectionMapper.h"
 #include "ASpectrumApiClient.h"
 
@@ -37,15 +37,17 @@ public:
 	SpectrumManager(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size, bool use_cache=true);
 	virtual ~SpectrumManager();
 	
-	void SetASpectrumApiClient(std::unique_ptr<ASpectrumApiClient>&& api_client);
-	const std::vector<SpectrumChannel> GetChannels(uint pos_x, uint pos_y);
+	void AddSpectrumApiClient(std::string tag, std::unique_ptr<ASpectrumApiClient>&& api_client);
+	const std::vector<SpectrumChannel> GetChannels(std::string tag, uint pos_x, uint pos_y);
 	
 private:
 	
 	bool m_UseCache;
+	uint m_CellWidthCount;
+	uint m_CellHeightCount;
 	ProjectionMapper m_ProjectionMapper;
-	SpectrumChannelsRAMCache *m_ChannelsRAMCache;
-	std::unique_ptr<ASpectrumApiClient> m_ApiClient;
+	
+	std::unordered_map<std::string, std::unique_ptr<ASpectrumApiClient> > m_ApiClientsMap;
 	
 };
 

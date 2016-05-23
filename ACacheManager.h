@@ -17,18 +17,31 @@
 
 
 
-#ifndef SPECTRUMCHANNELSCACHEFACTORY_H
-#define SPECTRUMCHANNELSCACHEFACTORY_H
+#ifndef ACACHEMANAGER_H
+#define ACACHEMANAGER_H
 
-#include "SpectrumChannelsRAMCache.h"
+#include <vector>
+
+#include "Log.h"
 #include "IConfiguration.h"
+#include "SpectrumChannelsRAMCache.h"
 
 
-class SpectrumChannelsCacheFactory {
+class ACacheManager : public IConfiguration {
 public:
+	ACacheManager();
+	virtual ~ACacheManager();
+
 	
-	static SpectrumChannelsRAMCache* CreateSpectrumChannelsRAMCache(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
+	void InitializeCache(uint cell_width_count, uint cell_height_count);
+	void LoadCacheFromDisk();
+	
+	std::vector<SpectrumChannel> GetFromCache(uint x, uint y);
+	void PushIntoCache(uint x, uint y, std::vector<SpectrumChannel>& vec);
+	
+private:
+	SpectrumChannelsRAMCache *m_ChannelsRAMCache;
 };
 
-#endif /* SPECTRUMCHANNELSCACHEFACTORY_H */
+#endif /* ACACHEMANAGER_H */
 

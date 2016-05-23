@@ -29,8 +29,9 @@ public:
 	ProjectionMapper(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);
 	virtual ~ProjectionMapper();
 	
-	void LocalPosXY2LatLng(uint pos_x, uint pos_y, double& lat, double& lng);
 	void LocalPosXY2IndexXY(uint pos_x, uint pos_y, uint& idx_x, uint& idx_y);
+	void LocalPosXY2LatLng(uint pos_x, uint pos_y, double& lat, double& lng);
+	void LatLng2IndexXY(double lat, double lng, uint& idx_x, uint& idx_y);
 	
 	
 private:

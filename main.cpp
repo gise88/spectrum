@@ -45,24 +45,24 @@ int main(int argc, char** argv) {
 	std::unique_ptr<GoogleAPIClient> apiclient(new GoogleAPIClient(2.0, DeviceType::MODE_1));
 	
 	try {		
-		spectrumManager.SetASpectrumApiClient(std::move(apiclient));
+		spectrumManager.AddSpectrumApiClient("MODE1_2.0", std::move(apiclient));
 		
 		// It will crash because the instance "apiclient" was moved inside the spectrumManager
 		// printf("%s", apiclient->GetCurrentConfiguration().c_str());
 		
 		// the cache is empty so need to download all the data
-		spectrumManager.GetChannels(0, 0);
-		spectrumManager.GetChannels(50, 0);
-		spectrumManager.GetChannels(0, 50);
-		spectrumManager.GetChannels(0, 100);
-		spectrumManager.GetChannels(100, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 50, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 50);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 100);
+		spectrumManager.GetChannels("MODE1_2.0", 100, 0);
 		
 		// the cache already has the following items
-		spectrumManager.GetChannels(0, 0);
-		spectrumManager.GetChannels(50, 0);
-		spectrumManager.GetChannels(0, 50);
-		spectrumManager.GetChannels(0, 100);
-		spectrumManager.GetChannels(100, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 50, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 50);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 100);
+		spectrumManager.GetChannels("MODE1_2.0", 100, 0);
 		
 	} catch (CURLErrorException &e) {
 		printf("%s\n\n", e.what());
@@ -72,7 +72,9 @@ int main(int argc, char** argv) {
 		printf("%s\n\n", e.what());
 	} catch (std::out_of_range &e) {
 		printf("%s\n\n", e.what());
-	} catch (std::runtime_error &e){
+	} catch (std::invalid_argument &e) {
+		printf("%s\n\n", e.what());
+	} catch (std::runtime_error &e) {
 		printf("%s\n\n", e.what());
 	}
 
