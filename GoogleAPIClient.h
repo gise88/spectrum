@@ -18,7 +18,6 @@
 #ifndef GOOGLEAPICLIENT_H
 #define GOOGLEAPICLIENT_H
 
-
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -27,7 +26,6 @@
 
 #include "ASpectrumApiClient.h"
 #include "enum.h"
-
 
 
 using JSON = nlohmann::json;

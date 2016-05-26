@@ -15,13 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* 
- * File:   Exceptions.h
- * Author: Gianluca Iselli <gianluca.iselli@gmail.com>
- *
- * Created on May 6, 2016, 1:04 AM
- */
-
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
@@ -30,8 +23,6 @@
 #include <cstring>        // std::strlen, std::strcpy
 #include <stdexcept>
 #include "Log.h"
-
-
 
 
 #define EXCEPTION_HEADER	"[EXCEPTION](" __LOCATION__ ") "

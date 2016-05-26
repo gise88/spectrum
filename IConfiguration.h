@@ -15,13 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* 
- * File:   IConfiguration.h
- * Author: Gianluca Iselli <gianluca.iselli@gmail.com>
- *
- * Created on May 21, 2016, 6:16 PM
- */
-
 #ifndef ICONFIGURATION_H
 #define ICONFIGURATION_H
 

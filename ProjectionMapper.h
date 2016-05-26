@@ -15,15 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #ifndef PROJECTIONMAPPER_H
 #define PROJECTIONMAPPER_H
 
 #include <proj_api.h>
 
+#include "Singleton.h"
 
-class ProjectionMapper {
+
+class ProjectionMapper : public Singleton<ProjectionMapper> {
 public:
 	
 	ProjectionMapper(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size);

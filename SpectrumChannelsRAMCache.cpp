@@ -51,29 +51,31 @@ SpectrumChannelsRAMCache::~SpectrumChannelsRAMCache() {
 }
 
 void SpectrumChannelsRAMCache::ClearCache() {
+	LogD(0, "ClearCache()\n");
 	for (std::vector<Entry *> entries : m_GridEntries)
 		for (Entry * entry : entries)
 			entry->Clear();
 }
 
-void SpectrumChannelsRAMCache::Push(uint x, uint y, SpectrumChannel *item) {
-	LogD(0, "push(%d, %d, {%s})\n", x, y, item->toString());
+void SpectrumChannelsRAMCache::Push(uint x, uint y, std::vector<SpectrumChannel>& vec) {
+	LogD(0, "push(%d, %d, list)\n", x, y);
+	
 	if (x >= m_CellWidthCount)
 		throw MakeException(std::out_of_range, "x (" + std::to_string(x) + ") out of range: ");
 	if (y >= m_CellHeightCount)
 		throw MakeException(std::out_of_range, "y (" + std::to_string(y) + ") out of range: ");
-	m_GridEntries[x][y]->Push(item);
-}
-
-void SpectrumChannelsRAMCache::Push(uint x, uint y, std::vector<SpectrumChannel>& vec) {
-	LogD(0, "push(%d, %d, list)\n", x, y);
 	
+	if (m_GridEntries[x][y]->Size() > 0) {
+		LogE("m_GridEntries[%d][%d] is not empty!\n", x, y);
+		return;
+	}
 	for (SpectrumChannel item : vec)
-		this->Push(x, y, &item);
+		m_GridEntries[x][y]->Push(&item);
 }
 
 const std::vector<SpectrumChannel> SpectrumChannelsRAMCache::Get(uint x, uint y) {
 	LogD(0, "get(%d, %d)\n", x, y);
+	
 	if (x >= m_CellWidthCount)
 		throw MakeException(std::out_of_range, "x (" + std::to_string(x) + ") out of range: ");
 	if (y >= m_CellHeightCount)
@@ -96,6 +98,11 @@ SpectrumChannelsRAMCache::Entry::~Entry() {
 void SpectrumChannelsRAMCache::Entry::Clear() {
 	LogD(0, "Entry::Clear()\n");
 	m_Channels.clear();
+}
+
+long unsigned int SpectrumChannelsRAMCache::Entry::Size() {
+	LogD(0, "Entry::Size()\n");
+	return m_Channels.size();
 }
 
 void SpectrumChannelsRAMCache::Entry::Push(SpectrumChannel *item) {

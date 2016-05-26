@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Log.o \
 	${OBJECTDIR}/ProjectionMapper.o \
 	${OBJECTDIR}/Request.o \
+	${OBJECTDIR}/SpectrumChannelsDiskCache.o \
 	${OBJECTDIR}/SpectrumChannelsRAMCache.o \
 	${OBJECTDIR}/SpectrumManager.o \
 	${OBJECTDIR}/main.o
@@ -103,6 +104,11 @@ ${OBJECTDIR}/Request.o: Request.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Request.o Request.cpp
+
+${OBJECTDIR}/SpectrumChannelsDiskCache.o: SpectrumChannelsDiskCache.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumChannelsDiskCache.o SpectrumChannelsDiskCache.cpp
 
 ${OBJECTDIR}/SpectrumChannelsRAMCache.o: SpectrumChannelsRAMCache.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -201,6 +207,19 @@ ${OBJECTDIR}/Request_nomain.o: ${OBJECTDIR}/Request.o Request.cpp
 	    $(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Request_nomain.o Request.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Request.o ${OBJECTDIR}/Request_nomain.o;\
+	fi
+
+${OBJECTDIR}/SpectrumChannelsDiskCache_nomain.o: ${OBJECTDIR}/SpectrumChannelsDiskCache.o SpectrumChannelsDiskCache.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/SpectrumChannelsDiskCache.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Werror -DDEBUG -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SpectrumChannelsDiskCache_nomain.o SpectrumChannelsDiskCache.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/SpectrumChannelsDiskCache.o ${OBJECTDIR}/SpectrumChannelsDiskCache_nomain.o;\
 	fi
 
 ${OBJECTDIR}/SpectrumChannelsRAMCache_nomain.o: ${OBJECTDIR}/SpectrumChannelsRAMCache.o SpectrumChannelsRAMCache.cpp 

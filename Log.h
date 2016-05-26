@@ -95,7 +95,7 @@ private:
 #define LogINIT(filename)  Log::Instance().m_init(filename)
 
 #ifndef LOG_LEVEL_MIN
-#define LOG_LEVEL_MIN	2
+#define LOG_LEVEL_MIN	0
 #endif
 
 #if defined(__clang__) || defined(__GNUC__)

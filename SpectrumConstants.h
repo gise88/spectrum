@@ -44,6 +44,12 @@
 #define CELL_SIDE_SIZE		50 //meters
 
 
+#ifdef DEBUG
+#define CACHE_FILES_FOLDER	"/workspace/spectrum-test-cache/"
+#else
+#define CACHE_FILES_FOLDER	"cache/"
+#endif
+
 
 #endif /* SPECTRUMCONSTANTS_H */
 

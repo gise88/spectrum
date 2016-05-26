@@ -15,34 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACACHEMANAGER_H
-#define ACACHEMANAGER_H
+
+
+#ifndef SPECTRUMCHANNELSDISKCACHE_H
+#define SPECTRUMCHANNELSDISKCACHE_H
 
 #include <vector>
+#include <functional>
 
-#include "Log.h"
-#include "IConfiguration.h"
 #include "SpectrumChannelsRAMCache.h"
-#include "ProjectionMapper.h"
-#include "SpectrumChannelsDiskCache.h"
 
-
-class ACacheManager : public IConfiguration {
+class SpectrumChannelsDiskCache {
 public:
-	ACacheManager();
-	virtual ~ACacheManager();
-
+	SpectrumChannelsDiskCache(std::string configuration);
+	virtual ~SpectrumChannelsDiskCache();
 	
-	void InitializeCache(uint cell_width_count, uint cell_height_count);
-	void LoadCacheFromDisk();
-	
-	std::vector<SpectrumChannel> GetFromCache(uint x, uint y);
-	void PushIntoCache(uint x, uint y, std::vector<SpectrumChannel>& vec);
+	void LoadData(std::function<bool(char *, uint &, uint &)> foreach_file_func, 
+		std::function<void(std::vector<SpectrumChannel>&, uint, uint)> foreach_location_read);
+	static void EnsureCacheFolder();
 	
 private:
-	SpectrumChannelsRAMCache *m_ChannelsRAMCache; 
-	SpectrumChannelsDiskCache *m_ChannelsDiskCache;
+	
+	std::string m_CacheFolder;
 };
 
-#endif /* ACACHEMANAGER_H */
+#endif /* SPECTRUMCHANNELSDISKCACHE_H */
 

@@ -15,8 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #ifndef SPECTRUMCHANNELSRAMCACHE_H
 #define SPECTRUMCHANNELSRAMCACHE_H
 
@@ -24,7 +22,6 @@
 #include <vector>
 
 #include "IConfiguration.h"
-
 
 
 struct SpectrumChannel {
@@ -55,7 +52,6 @@ public:
 	
 	void ClearCache();
 	
-	void Push(uint x, uint y, SpectrumChannel *item);
 	void Push(uint x, uint y, std::vector<SpectrumChannel>& vec);
 	const std::vector<SpectrumChannel> Get(uint x, uint y);
 	
@@ -67,12 +63,14 @@ private:
 		virtual ~Entry();
 		
 		void Clear();
+		long unsigned int Size();
 		void Push(SpectrumChannel *item);
 		const std::vector<SpectrumChannel> Get();
 		
 	private:
 		std::vector<SpectrumChannel> m_Channels;
     };
+	
 	
 	std::vector< std::vector<Entry *> > m_GridEntries;
 	

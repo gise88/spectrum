@@ -22,6 +22,7 @@
 #include "Exceptions.h"
 #include "SpectrumManager.h"
 #include "SpectrumConstants.h"
+#include "SpectrumChannelsDiskCache.h"
 
 
 SpectrumManager::SpectrumManager(double SW_lat, double SW_lon, double area_width, double area_height, double cell_side_size, bool use_cache)
@@ -38,6 +39,9 @@ SpectrumManager::SpectrumManager(double SW_lat, double SW_lon, double area_width
 	if (fmod(area_height, cell_side_size) != 0.0)
 		DieWithError(1, "area_height %% cell_side_length != 0.0");
 	m_CellHeightCount = (uint) area_height/cell_side_size;
+	
+	if (m_UseCache)
+		SpectrumChannelsDiskCache::EnsureCacheFolder();
 }
 
 SpectrumManager::~SpectrumManager() {
@@ -56,8 +60,10 @@ void SpectrumManager::AddSpectrumApiClient(std::string tag, std::unique_ptr<ASpe
 	
 	m_ApiClientsMap[tag] = std::move(api_client);
 	
-	if (m_UseCache) 
+	if (m_UseCache) {
 		m_ApiClientsMap[tag]->InitializeCache(m_CellWidthCount, m_CellHeightCount);
+		m_ApiClientsMap[tag]->LoadCacheFromDisk();
+	}
 }
 
 const std::vector<SpectrumChannel> SpectrumManager::GetChannels(std::string tag, uint pos_x, uint pos_y) {

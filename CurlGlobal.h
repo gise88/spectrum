@@ -15,11 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef CURLGLOBAL_H
 #define CURLGLOBAL_H
-
-
 
 /* libcurl (http://curl.haxx.se/libcurl/c) */
 #include <curl/curl.h>
