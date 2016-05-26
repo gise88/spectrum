@@ -26,6 +26,7 @@
 #include "SpectrumConstants.h"
 #include "SpectrumChannelsDiskCache.h"
 
+
 void SpectrumChannelsDiskCache::EnsureCacheFolder() {
 	LogD(0, "EnsureCacheFolder()\n");
 	struct stat sb;	
@@ -72,6 +73,7 @@ void SpectrumChannelsDiskCache::LoadData(
 		std::function<bool(char *, uint &, uint &)> foreach_file, 
 		// Lambda function: pass the vector of SpectrumChannel and x,y index of cache matrix
 		std::function<void(std::vector<SpectrumChannel>&, uint, uint)> foreach_channel_read) {
+	LogD(0, "LoadData()\n");
 
 	DIR *dir;
 	struct dirent *ent;

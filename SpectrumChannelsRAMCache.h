@@ -18,7 +18,6 @@
 #ifndef SPECTRUMCHANNELSRAMCACHE_H
 #define SPECTRUMCHANNELSRAMCACHE_H
 
-#include <list>
 #include <vector>
 
 #include "IConfiguration.h"

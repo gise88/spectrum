@@ -20,7 +20,6 @@
 #ifndef SPECTRUMMANAGER_H
 #define SPECTRUMMANAGER_H
 
-#include <list>
 #include <vector>
 #include <memory>
 #include <unordered_map>

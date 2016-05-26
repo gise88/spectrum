@@ -43,7 +43,6 @@ void ACacheManager::InitializeCache(uint cell_width_count, uint cell_height_coun
 	
 	m_ChannelsRAMCache = new SpectrumChannelsRAMCache(cell_width_count, cell_height_count);	
 	m_ChannelsDiskCache = new SpectrumChannelsDiskCache(GetCurrentConfiguration());
-	LogD(10, "TOOOODOOO: current_configuration\n");
 }
 
 void ACacheManager::LoadCacheFromDisk() {

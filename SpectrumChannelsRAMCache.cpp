@@ -58,7 +58,7 @@ void SpectrumChannelsRAMCache::ClearCache() {
 }
 
 void SpectrumChannelsRAMCache::Push(uint x, uint y, std::vector<SpectrumChannel>& vec) {
-	LogD(0, "push(%d, %d, list)\n", x, y);
+	LogD(0, "push(%d, %d, *vec*)\n", x, y);
 	
 	if (x >= m_CellWidthCount)
 		throw MakeException(std::out_of_range, "x (" + std::to_string(x) + ") out of range: ");

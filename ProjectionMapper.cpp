@@ -65,6 +65,8 @@ void ProjectionMapper::LocalPosXY2IndexXY(uint pos_x, uint pos_y, uint& idx_x, u
 	
 	idx_x = (uint)floor((double)pos_x / m_CellSideSize);
 	idx_y = (uint)floor((double)pos_y / m_CellSideSize);
+	
+	LogD(1, "LocalPosXY2IndexXY (%d, %d) -> idx_x: %d  idx_y: %d\n", pos_x, pos_y, idx_x, idx_y);
 }
 
 void ProjectionMapper::LocalPosXY2LatLng(uint pos_x, uint pos_y, double& lat, double& lng) {
@@ -86,7 +88,7 @@ void ProjectionMapper::LocalPosXY2LatLng(uint pos_x, uint pos_y, double& lat, do
 	lat = y * RAD_TO_DEG;
 	lng = x * RAD_TO_DEG;
 	
-	LogD(1, "LocalPosXY2LatLng - lat: %lf    lng: %lf\n", lat, lng);
+	LogD(1, "LocalPosXY2LatLng (%d, %d) -> lat: %lf  lng: %lf\n", pos_x, pos_y, lat, lng);
 }
 
 void ProjectionMapper::LatLng2IndexXY(double lat, double lng, uint& idx_x, uint& idx_y) {
@@ -113,7 +115,5 @@ void ProjectionMapper::LatLng2IndexXY(double lat, double lng, uint& idx_x, uint&
 	if (pos_y < 0)
 		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") < 0");
 	
-	
-	
-	LogD(1, "LatLng2IndexXY - idx_x: %d    idx_y: %d\n", idx_x, idx_y);
+	LogD(1, "LatLng2IndexXY (%lf, %lf) -> idx_x: %d  idx_y: %d\n", lat, lng, idx_x, idx_y);
 }

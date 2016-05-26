@@ -36,7 +36,6 @@ void Log::m_init(const char *filename) {
 }
 
 void Log::m_write(const char *fmt, va_list va_alist, bool onstderr) {
-
 	if (onstderr) {
 		va_list copy;
 		va_copy(copy, va_alist);
