@@ -37,7 +37,7 @@ public:
 	void LoadCacheFromDisk();
 	
 	std::vector<SpectrumChannel> GetFromCache(uint x, uint y);
-	void PushIntoCache(uint x, uint y, std::vector<SpectrumChannel>& vec);
+	void PushIntoCache(double lat, double lng, uint x, uint y, std::vector<SpectrumChannel>& vec);
 	
 private:
 	SpectrumChannelsRAMCache *m_ChannelsRAMCache; 

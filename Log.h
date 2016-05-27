@@ -81,9 +81,11 @@ private:
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
 #define DEBUG_HEADER	KBOLD KYEL "[DEBUG](" __LOCATION__ ") " KNRM
+#define WARNING_HEADER	KBOLD KYEL "[ERROR](" __LOCATION__ ") " KNRM
 #define ERROR_HEADER	KBOLD KRED "[ERROR](" __LOCATION__ ") " KNRM
 #else
 #define DEBUG_HEADER	"[DEBUG](" __LOCATION__ ") "
+#define WARNING_HEADER	"[WARNING](" __LOCATION__ ") "
 #define ERROR_HEADER	"[ERROR](" __LOCATION__ ") "
 #endif
 #else
@@ -95,7 +97,7 @@ private:
 #define LogINIT(filename)  Log::Instance().m_init(filename)
 
 #ifndef LOG_LEVEL_MIN
-#define LOG_LEVEL_MIN	0
+#define LOG_LEVEL_MIN	2
 #endif
 
 #if defined(__clang__) || defined(__GNUC__)
@@ -104,6 +106,7 @@ private:
 #ifdef DEBUG
 #define LogD(lev, ...)	if (lev >= LOG_LEVEL_MIN) Log::Instance().m_debug(DEBUG_HEADER, __VA_ARGS__)
 #endif
+#define LogW(...)	Log::Instance().m_error(WARNING_HEADER, __VA_ARGS__)
 #define LogE(...)	Log::Instance().m_error(ERROR_HEADER, __VA_ARGS__)
 #define LogHEXDUMP(addr, len, ...)	Log::Instance().m_hexdump(addr, len, __VA_ARGS__)
 

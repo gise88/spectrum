@@ -15,11 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <iomanip>
+#include <fstream>
 #include <dirent.h>
 #include <unistd.h>
-#include <fstream>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "Log.h"
 #include "Exceptions.h"
@@ -72,7 +73,7 @@ void SpectrumChannelsDiskCache::LoadData(
 		// returns true and fills the idx_x, idx_y, otherwise returns false.
 		std::function<bool(char *, uint &, uint &)> foreach_file, 
 		// Lambda function: pass the vector of SpectrumChannel and x,y index of cache matrix
-		std::function<void(std::vector<SpectrumChannel>&, uint, uint)> foreach_channel_read) {
+		std::function<void(uint, uint, std::vector<SpectrumChannel>&)> foreach_channel_read) {
 	LogD(0, "LoadData()\n");
 
 	DIR *dir;
@@ -102,10 +103,21 @@ void SpectrumChannelsDiskCache::LoadData(
 						}
 					}
 					if (vec.size() > 0)
-						foreach_channel_read(vec, idx_x, idx_y);
+						foreach_channel_read(idx_x, idx_y, vec);
 				}
 			}
 		}
 		closedir(dir);
 	}
+}
+
+void SpectrumChannelsDiskCache::WriteData(double lat, double lng, std::vector<SpectrumChannel>& vec) {
+	LogD(0, "WriteData(*vec*, %lf, %lf)\n", lat, lng);
+	std::string filename(m_CacheFolder + std::to_string(lat) + "," + std::to_string(lng) + ".csv");
+	LogL(5, "write data on file: %s\n", filename.c_str());
+	
+	std::ofstream ofs(filename);	
+	for(SpectrumChannel item : vec)
+		ofs << item.number << "," << std::setprecision(15) << item.maxPowerDBm << std::endl;
+	ofs.close();
 }

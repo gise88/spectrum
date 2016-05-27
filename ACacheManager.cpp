@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "Log.h"
 #include "Utilities.h"
 #include "ACacheManager.h"
@@ -65,7 +66,7 @@ void ACacheManager::LoadCacheFromDisk() {
 				return true;
 			}
 			return false;
-		},[alias_ChannelsRAMCache](std::vector<SpectrumChannel>& vec, uint x, uint y) -> void {
+		},[alias_ChannelsRAMCache](uint x, uint y, std::vector<SpectrumChannel>& vec) -> void {
 			LogD(0, "[Lambda]: (std::vector<SpectrumChannel>& vec, uint x, uint y)(*vec*, %d, %d)\n", x, y);
 			alias_ChannelsRAMCache->Push(x, y, vec);
 		});
@@ -78,9 +79,12 @@ std::vector<SpectrumChannel> ACacheManager::GetFromCache(uint x, uint y) {
 	return m_ChannelsRAMCache->Get(x, y);
 }
 
-void ACacheManager::PushIntoCache(uint x, uint y, std::vector<SpectrumChannel>& vec) {
-	LogD(0, "PushIntoCache(%d, %d, *vec*)\n", x, y);
-	if (m_ChannelsRAMCache == nullptr)
+void ACacheManager::PushIntoCache(double lat, double lng, uint x, uint y, std::vector<SpectrumChannel>& vec) {
+	LogD(0, "PushIntoCache(%lf, %lf, %d, %d, *vec*)\n", lat, lng, x, y);
+	
+	if (m_ChannelsRAMCache == nullptr || m_ChannelsDiskCache == nullptr)
 		throw MakeException(std::runtime_error, std::string("You have to initialize the cache before calling ") + __func__ + "() function");
+	
 	m_ChannelsRAMCache->Push(x, y, vec);
+	m_ChannelsDiskCache->WriteData(lat, lng, vec);
 }

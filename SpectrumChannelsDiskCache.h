@@ -31,7 +31,10 @@ public:
 	virtual ~SpectrumChannelsDiskCache();
 	
 	void LoadData(std::function<bool(char *, uint &, uint &)> foreach_file_func, 
-		std::function<void(std::vector<SpectrumChannel>&, uint, uint)> foreach_location_read);
+		std::function<void(uint, uint, std::vector<SpectrumChannel>&)> foreach_location_read);
+	
+	void WriteData(double lat, double lng, std::vector<SpectrumChannel>& vec);
+	
 	static void EnsureCacheFolder();
 	
 private:

@@ -52,10 +52,10 @@ int main(int argc, char** argv) {
 		
 		// the cache is empty so need to download all the data
 		spectrumManager.GetChannels("MODE1_2.0", 0, 0);
-//		spectrumManager.GetChannels("MODE1_2.0", 50, 0);
-//		spectrumManager.GetChannels("MODE1_2.0", 0, 50);
-//		spectrumManager.GetChannels("MODE1_2.0", 0, 100);
-//		spectrumManager.GetChannels("MODE1_2.0", 100, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 50, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 50);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 100);
+		spectrumManager.GetChannels("MODE1_2.0", 100, 0);
 		
 		// the cache already has the following items
 //		spectrumManager.GetChannels("MODE1_2.0", 0, 0);

@@ -97,7 +97,7 @@ const std::vector<SpectrumChannel> SpectrumManager::GetChannels(std::string tag,
 	channels = api_client->GetSpectrumChannels(lat, lng);
 	
 	if (m_UseCache)
-		api_client->PushIntoCache(x, y, channels);
+		api_client->PushIntoCache(lat, lng, x, y, channels);
 	
 	return channels;
 }

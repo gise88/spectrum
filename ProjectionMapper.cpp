@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <math.h>
+
 #include "ProjectionMapper.h"
 #include "Utilities.h"
 
@@ -103,8 +105,9 @@ void ProjectionMapper::LatLng2IndexXY(double lat, double lng, uint& idx_x, uint&
 	if ((err = pj_transform(m_PJLatlng, m_PJMerc, 1, 1, &east, &north, NULL)) != 0)
 		DieWithError(1, "Failed to transform (SW_lat, SW_lon) - Error code: %d   Error message: %s\n", err, pj_strerrno(err));
 	
-	pos_x = north - m_OriginNorthing;
-	pos_y = east - m_OriginEastings;
+	// TODO: this round is a little hack.. Is it right?
+	pos_x = round(north - m_OriginNorthing);
+	pos_y = round(east - m_OriginEastings);
 	
 	if (pos_x >= m_AreaWidth)
 		throw MakeException(std::out_of_range, "pos_x("+std::to_string(pos_x)+") >= m_AreaWidth");
@@ -115,5 +118,8 @@ void ProjectionMapper::LatLng2IndexXY(double lat, double lng, uint& idx_x, uint&
 	if (pos_y < 0)
 		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") < 0");
 	
-	LogD(1, "LatLng2IndexXY (%lf, %lf) -> idx_x: %d  idx_y: %d\n", lat, lng, idx_x, idx_y);
+	idx_x = (uint)floor(pos_x / m_CellSideSize);
+	idx_y = (uint)floor(pos_y / m_CellSideSize);
+	
+	LogD(1, "LatLng2IndexXY (%lf, %lf) ->  pos_x/y(%.3lf, %.3lf) -> idx_x: %d  idx_y: %d\n", lat, lng, pos_x, pos_y, idx_x, idx_y);
 }

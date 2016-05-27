@@ -66,7 +66,7 @@ void SpectrumChannelsRAMCache::Push(uint x, uint y, std::vector<SpectrumChannel>
 		throw MakeException(std::out_of_range, "y (" + std::to_string(y) + ") out of range: ");
 	
 	if (m_GridEntries[x][y]->Size() > 0) {
-		LogE("m_GridEntries[%d][%d] is not empty!\n", x, y);
+		LogW("m_GridEntries[%d][%d] is not empty!\n", x, y);
 		return;
 	}
 	for (SpectrumChannel item : vec)
@@ -114,3 +114,14 @@ const std::vector<SpectrumChannel> SpectrumChannelsRAMCache::Entry::Get() {
 	LogD(0, "Entry::get()\n");
 	return m_Channels;
 }
+
+
+
+/*
+ * 42.098935  -75.918300  ->  idx_(x, y)=(1, 0)
+ * 42.098600  -75.918300  ->  idx_(x, y)=(0, 0)
+ * 42.098600  -75.917402  ->  idx_(x, y)=(0, 1)
+ * 42.099269  -75.918300  ->  idx_(x, y)=(1, 0)
+ * 42.098600  -75.917851  ->  idx_(x, y)=(0, 0)
+ * 
+*/
