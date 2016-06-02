@@ -34,15 +34,18 @@ public:
 	void LatLng2IndexXY(double lat, double lng, uint& idx_x, uint& idx_y);
 	
 	
+	double m_NWLat;
+	double m_NWLon;
 private:
 
 	double m_SWLat;
 	double m_SWLon;
-	double m_NWLat;
-	double m_NWLon;
 	double m_AreaWidth;
 	double m_AreaHeight;
 	double m_CellSideSize;
+	
+	uint m_CellWidthCount;
+	uint m_CellHeightCount;
 	
 	projPJ m_PJMerc;
 	projPJ m_PJLatlng;

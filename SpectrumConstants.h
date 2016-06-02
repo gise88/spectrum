@@ -39,12 +39,13 @@
 #define DEFAULT_DEVICE_TYPE			DEVICE_TYPE_MODE_1
 
 
-#define AREA_WIDTH_SIZE		200 //meters
-#define AREA_HEIGHT_SIZE	150 //meters
+#define AREA_WIDTH_SIZE		2000 //meters
+#define AREA_HEIGHT_SIZE	1500 //meters
 #define CELL_SIDE_SIZE		50 //meters
 
 
-#ifdef DEBUG
+//#define DEBUG_CACHE
+#ifdef DEBUG_CACHE
 #define CACHE_FILES_FOLDER	"/workspace/spectrum-test-cache/"
 #else
 #define CACHE_FILES_FOLDER	"cache/"

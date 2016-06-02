@@ -135,6 +135,8 @@
         <cTool>
           <incDir>
             <pElem>.</pElem>
+            <pElem>../googletest/googletest-1.7</pElem>
+            <pElem>../googletest/googletest-1.7/include</pElem>
           </incDir>
         </cTool>
         <ccTool>
@@ -143,6 +145,7 @@
             <pElem>../googletest/googletest-1.7</pElem>
             <pElem>../googletest/googletest-1.7/include</pElem>
           </incDir>
+          <commandLine>-ggdb -Wall -pedantic -fsanitize=address -fno-omit-frame-pointer</commandLine>
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
@@ -160,7 +163,7 @@
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
-          <commandLine>-lcurl</commandLine>
+          <commandLine>-lm -lcurl -lproj -fsanitize=address</commandLine>
         </linkerTool>
       </folder>
       <item path="json.hpp" ex="false" tool="3" flavor2="0">

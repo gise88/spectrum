@@ -32,13 +32,25 @@ SpectrumManager::SpectrumManager(double SW_lat, double SW_lon, double area_width
 	if (cell_side_size == 0.0)
 		DieWithError(1, "cell length side cannot be zero!");
 	
+	if (area_width <= 0.0)
+		DieWithError(1, "area width cannot be less than or equal to zero!");
+	
+	if (area_height <= 0.0)
+		DieWithError(1, "area height cannot be less than or equal to zero!");
+	
 	if (fmod(area_width, cell_side_size) != 0.0)
 		DieWithError(1, "area_width %% cell_side_length != 0.0");
-	m_CellWidthCount = (uint) area_width/cell_side_size;
+	m_CellWidthCount = (uint) (area_width/cell_side_size);
 	
 	if (fmod(area_height, cell_side_size) != 0.0)
 		DieWithError(1, "area_height %% cell_side_length != 0.0");
-	m_CellHeightCount = (uint) area_height/cell_side_size;
+	m_CellHeightCount = (uint) (area_height/cell_side_size);
+	
+	if (m_CellWidthCount <= 0.0)
+		DieWithError(1, "m_CellWidthCount <= 0");
+	
+	if (m_CellHeightCount <= 0.0)
+		DieWithError(1, "m_CellWidthCount <= 0");
 	
 	if (m_UseCache)
 		SpectrumChannelsDiskCache::EnsureCacheFolder();

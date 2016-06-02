@@ -135,13 +135,13 @@ ${OBJECTDIR}/main.o: main.cpp
 
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/Test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}  -lcurl -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} ../googletest/dist/Release/GNU-Linux/libgoogletest.a 
+	${LINK.cc}  -lm -lcurl -lproj -fsanitize=address -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} ../googletest/dist/Release/GNU-Linux/libgoogletest.a 
 
 
 ${TESTDIR}/Test.o: Test.cpp 
 	${MKDIR} -p ${TESTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Werror -DDEBUG -I. -I../googletest/googletest-1.7 -I../googletest/googletest-1.7/include -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/Test.o Test.cpp
+	$(COMPILE.cc) -g -Werror -DDEBUG -I. -I../googletest/googletest-1.7 -I../googletest/googletest-1.7/include -std=c++11 -ggdb -Wall -pedantic -fsanitize=address -fno-omit-frame-pointer -MMD -MP -MF "$@.d" -o ${TESTDIR}/Test.o Test.cpp
 
 
 ${OBJECTDIR}/ACacheManager_nomain.o: ${OBJECTDIR}/ACacheManager.o ACacheManager.cpp 

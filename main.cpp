@@ -22,34 +22,60 @@
 #define _GNU_SOURCE
 #endif
 
+#include <random>
 #include <cstdlib>
 
 #include "Log.h"
 #include "Exceptions.h"
-#include "SpectrumConstants.h"
 #include "SpectrumManager.h"
-
-#include "Utilities.h"
 #include "GoogleAPIClient.h"
+#include "SpectrumConstants.h"
+
 
 // global singleton instance of SpectrumManager class
-static SpectrumManager gs_instance_spectrum_manager(42.0986, -75.9183, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE, CELL_SIDE_SIZE);
-//static SpectrumManager gs_instance_spectrum_manager(40.814194, -73.501308, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE, CELL_SIDE_SIZE);
+
+
 
 /*
  * 
  */
 int main(int argc, char** argv) {
 
+	SpectrumManager gs_instance_spectrum_manager(42.0986, -75.9183, AREA_WIDTH_SIZE, AREA_HEIGHT_SIZE, CELL_SIDE_SIZE);
+
+	
 	SpectrumManager &spectrumManager = SpectrumManager::Instance();
 	std::unique_ptr<GoogleAPIClient> apiclient(new GoogleAPIClient(2.0, DeviceType::MODE_1));
-	
+
 	try {		
-		spectrumManager.AddSpectrumApiClient("MODE1_2.0", std::move(apiclient));
-		
+		spectrumManager.AddSpectrumApiClient("MODE1_2.0", std::move(apiclient));		
 		// It will crash because the instance "apiclient" was moved inside the spectrumManager
 		// printf("%s", apiclient->GetCurrentConfiguration().c_str());
+
+#if 0
+		uint num=0;
+		for (int x=0; x<AREA_WIDTH_SIZE; x+=CELL_SIDE_SIZE) {
+			for (int y=0; y<AREA_HEIGHT_SIZE; y+=CELL_SIDE_SIZE) {
+				num++;
+				spectrumManager.GetChannels("MODE1_2.0", x, y);
+				printf("num: %d\n", num);
+			}
+		}
+#endif
 		
+#if 1
+		uint tests = 10000;
+		std::random_device rd;     // only used once to initialise (seed) engine
+		std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+		std::uniform_int_distribution<uint> uniWidth(0, AREA_WIDTH_SIZE - 1); // guaranteed unbiased
+		std::uniform_int_distribution<uint> uniHeight(0, AREA_HEIGHT_SIZE -1); // guaranteed unbiased
+		for (int i=0; i<tests; i++) {
+			spectrumManager.GetChannels("MODE1_2.0", uniWidth(rng), uniHeight(rng));
+		}
+#endif
+		
+		
+#if 0	
 		// the cache is empty so need to download all the data
 		spectrumManager.GetChannels("MODE1_2.0", 0, 0);
 		spectrumManager.GetChannels("MODE1_2.0", 50, 0);
@@ -58,11 +84,12 @@ int main(int argc, char** argv) {
 		spectrumManager.GetChannels("MODE1_2.0", 100, 0);
 		
 		// the cache already has the following items
-//		spectrumManager.GetChannels("MODE1_2.0", 0, 0);
-//		spectrumManager.GetChannels("MODE1_2.0", 50, 0);
-//		spectrumManager.GetChannels("MODE1_2.0", 0, 50);
-//		spectrumManager.GetChannels("MODE1_2.0", 0, 100);
-//		spectrumManager.GetChannels("MODE1_2.0", 100, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 50, 0);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 50);
+		spectrumManager.GetChannels("MODE1_2.0", 0, 100);
+		spectrumManager.GetChannels("MODE1_2.0", 100, 0);
+#endif
 		
 	} catch (CURLErrorException &e) {
 		printf("%s\n\n", e.what());

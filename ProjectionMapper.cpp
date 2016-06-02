@@ -24,6 +24,9 @@ ProjectionMapper::ProjectionMapper(double SW_lat, double SW_lon, double area_wid
 : m_SWLat(SW_lat), m_SWLon(SW_lon), m_AreaWidth(area_width), m_AreaHeight(area_height), m_CellSideSize(cell_side_size) {
 	LogD(0, "ProjectionMapper(%lf, %lf, %.2lf, %.2lf, %.2lf)\n",  SW_lat, SW_lon, area_width, area_height, cell_side_size);
 	int err;
+	
+	m_CellWidthCount = (uint)(m_AreaWidth/m_CellSideSize);
+	m_CellHeightCount = (uint)(m_AreaHeight/m_CellSideSize);
 
 	if (!(m_PJMerc = pj_init_plus("+proj=merc +lat_ts=0 +lon_0=0")))
 		DieWithError(1, "Failed to initiate merc proj\n");
@@ -65,8 +68,14 @@ void ProjectionMapper::LocalPosXY2IndexXY(uint pos_x, uint pos_y, uint& idx_x, u
 	if (pos_y >= m_AreaHeight)
 		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") >= m_AreaHeight");
 	
-	idx_x = (uint)floor((double)pos_x / m_CellSideSize);
-	idx_y = (uint)floor((double)pos_y / m_CellSideSize);
+	idx_x = (uint)round((double)pos_x / m_CellSideSize);
+	idx_y = (uint)round((double)pos_y / m_CellSideSize);
+	
+	if (idx_x >= m_CellWidthCount)
+		idx_x = m_CellWidthCount - 1;
+	
+	if (idx_y >= m_CellHeightCount)
+		idx_y = m_CellHeightCount - 1;
 	
 	LogD(1, "LocalPosXY2IndexXY (%d, %d) -> idx_x: %d  idx_y: %d\n", pos_x, pos_y, idx_x, idx_y);
 }
@@ -106,8 +115,8 @@ void ProjectionMapper::LatLng2IndexXY(double lat, double lng, uint& idx_x, uint&
 		DieWithError(1, "Failed to transform (SW_lat, SW_lon) - Error code: %d   Error message: %s\n", err, pj_strerrno(err));
 	
 	// TODO: this round is a little hack.. Is it right?
-	pos_x = round(north - m_OriginNorthing);
-	pos_y = round(east - m_OriginEastings);
+	pos_x = east - m_OriginEastings;
+	pos_y = north - m_OriginNorthing;
 	
 	if (pos_x >= m_AreaWidth)
 		throw MakeException(std::out_of_range, "pos_x("+std::to_string(pos_x)+") >= m_AreaWidth");
@@ -118,8 +127,14 @@ void ProjectionMapper::LatLng2IndexXY(double lat, double lng, uint& idx_x, uint&
 	if (pos_y < 0)
 		throw MakeException(std::out_of_range, "pos_y("+std::to_string(pos_y)+") < 0");
 	
-	idx_x = (uint)floor(pos_x / m_CellSideSize);
-	idx_y = (uint)floor(pos_y / m_CellSideSize);
+	idx_x = (uint)round(pos_x / m_CellSideSize);
+	idx_y = (uint)round(pos_y / m_CellSideSize);
+	
+	if (idx_x >= m_CellWidthCount)
+		idx_x = m_CellWidthCount - 1;
+	
+	if (idx_y >= m_CellHeightCount)
+		idx_y = m_CellHeightCount - 1;
 	
 	LogD(1, "LatLng2IndexXY (%lf, %lf) ->  pos_x/y(%.3lf, %.3lf) -> idx_x: %d  idx_y: %d\n", lat, lng, pos_x, pos_y, idx_x, idx_y);
 }
